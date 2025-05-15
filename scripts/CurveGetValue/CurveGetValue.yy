@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"CurveGetValue",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"CurveGetValue",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

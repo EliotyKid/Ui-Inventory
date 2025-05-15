@@ -196,6 +196,8 @@
     {"id":{"name":"__InputVibrateClassPulse","path":"scripts/__InputVibrateClassPulse/__InputVibrateClassPulse.yy",},},
     {"id":{"name":"__InputVibrateConfig","path":"scripts/__InputVibrateConfig/__InputVibrateConfig.yy",},},
     {"id":{"name":"__InputVibrateSystem","path":"scripts/__InputVibrateSystem/__InputVibrateSystem.yy",},},
+    {"id":{"name":"Approach","path":"scripts/Approach/Approach.yy",},},
+    {"id":{"name":"CurveGetValue","path":"scripts/CurveGetValue/CurveGetValue.yy",},},
     {"id":{"name":"DrawBox","path":"scripts/DrawBox/DrawBox.yy",},},
     {"id":{"name":"InputBindingFind","path":"scripts/InputBindingFind/InputBindingFind.yy",},},
     {"id":{"name":"InputBindingGet","path":"scripts/InputBindingGet/InputBindingGet.yy",},},

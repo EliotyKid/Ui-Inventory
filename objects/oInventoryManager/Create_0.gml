@@ -30,9 +30,34 @@ invetorySurfProps.pos.y = GUI_H*.5
 
 
 //animation curve variables
-scaleCurve = animcurve_get_channel(ac_inventory,"scale")
-scaleExitCurve = animcurve_get_channel(ac_inventory,"scaleExit")
-angleCurve = animcurve_get_channel(ac_inventory,"angle")
+scaleCurve = new CurveRunner(ac_inventory,"scale",1)
+scaleExitCurve = new CurveRunner(ac_inventory,"scaleExit",.5)
+angleCurve = new CurveRunner(ac_inventory,"angle",1)
+containerCurve = new CurveRunner(ac_inventory,"containerInv",1.2)
+invA = 0
 valScale = 0
 valAngle = 0
 pos = 0
+
+startInfoAnim = false
+
+containerInvX = invetorySurfProps.w*.5
+
+containerInfX = [
+    invetorySurfProps.w*.5,
+    invetorySurfProps.w*.5,
+    invetorySurfProps.w*.5
+]
+
+containerInfVal = [
+    0,
+    0,
+    0
+]
+containerInfCurve = [
+    new CurveRunner(ac_inventory,"containerInfItem",.8),
+    new CurveRunner(ac_inventory,"containerInfItem",1.2),
+    new CurveRunner(ac_inventory,"containerInfItem",1.6)
+]
+
+

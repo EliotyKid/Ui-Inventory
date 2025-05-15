@@ -14,23 +14,36 @@ if surface_exists(invetorySurf){
 
     var _xx = _buffeBoxes
     var _yy = _buffeBoxes
-
-    DrawBox("dt",_xx,_yy,_width,_height*.15)
+    
+    var _xEnd = _xx
+    var _xStart = containerInfX[0]
+    var _dist = _xStart - _xEnd
+    var _infX = _xStart - _dist * containerInfVal[0]
+    DrawBox("dt",_infX,_yy,_width,_height*.15)
     _yy += _height*.15+_buffeBoxes
 
-    DrawBox("w",_xx,_yy,_width,_height*.60)
+    _xEnd = _xx
+    _xStart = containerInfX[1]
+    _dist = _xStart - _xEnd
+    _infX = _xStart - _dist * containerInfVal[1]
+    DrawBox("w",_infX,_yy,_width,_height*.60)
     _yy += _buffeBoxes + _height*.60 
 
-    DrawBox("lt",_xx,_yy,_width,_height*.25)
+    _xEnd = _xx
+    _xStart = containerInfX[2]
+    _dist = _xStart - _xEnd
+    _infX = _xStart - _dist * containerInfVal[2]
+    DrawBox("lt",_infX,_yy,_width,_height*.25)
     
     //Second Peace
     _containerWidth = invetorySurfProps.w*.7 -  _buffeBoxes
     _containerHeight = invetorySurfProps.h - _buffeBoxes*2
     
-    var _containerX = invetorySurfProps.w - _containerWidth-_buffeBoxes
+    var _containerXStart = invetorySurfProps.w*.5 - _containerWidth*.5
+    var _containerXEnd = invetorySurfProps.w - _containerWidth-_buffeBoxes
+    var _dist = _containerXStart - _containerXEnd
+    var _containerX = _containerXStart- _dist * invA
     var _containerY = _buffeBoxes
-    
-    
     DrawBox("dt",_containerX,_containerY,_containerWidth,_containerHeight)
     
     
