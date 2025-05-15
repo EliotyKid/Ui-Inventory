@@ -12,6 +12,7 @@ valAngle = angleCurve.getValue()
 
 startInfoAnim = scaleCurve.pos >= .5
 
+
 invetorySurfProps.scale.x = valScale
 invetorySurfProps.scale.y = valScale
 

@@ -3,8 +3,8 @@ show = true
 
 invetorySurf = -1
 invetorySurfProps = {
-    w: GUI_W*.8,
-    h: GUI_H*.7,
+    w: GUI_W*.9,
+    h: GUI_H*.8,
     
     scale: {
         x: 0,
@@ -61,3 +61,10 @@ containerInfCurve = [
 ]
 
 
+navItems = ["Items", "Tools", "People"]
+navInd = 0
+navIndX = 0
+
+
+textSelectedColor = make_color_rgb(24,20,37)
+textUnselectedColor = make_color_rgb(194,133,105)
