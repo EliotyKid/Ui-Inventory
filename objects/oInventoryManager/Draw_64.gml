@@ -5,16 +5,6 @@ var _mxSurf = _mx-(invetorySurfProps.pos.x-invetorySurfProps.w*.5)
 var _mySurf = _my-(invetorySurfProps.pos.y-invetorySurfProps.h*.5)
 
 draw_set_font(fInventory)
-//var x1 = (invetorySurfProps.pos.x-invetorySurfProps.w*.5)
-//var y1 = (invetorySurfProps.pos.y-invetorySurfProps.h*.5)
-//var x2 = (invetorySurfProps.pos.x-invetorySurfProps.w*.5)+invetorySurfProps.w
-//var y2 = (invetorySurfProps.pos.y-invetorySurfProps.h*.5)+invetorySurfProps.h
-//draw_rectangle(x1,y1,x2,y2,false)
-
-//draw_text(30,0,$"{_mxSurf}, {_mySurf}")
-//var s = point_in_rectangle(_mxSurf,_mySurf,0,0,invetorySurfProps.w,invetorySurfProps.h)
-//if s show_message(45)
-//if point_in_rectangle(_mxSurf,_mySurf,,,,) show_message("dentro")
 
 if surface_exists(invetorySurf){
     surface_set_target(invetorySurf)
@@ -38,12 +28,7 @@ if surface_exists(invetorySurf){
     var _dist = _xStart - _xEnd
     var _infX = _xStart - _dist * containerInfVal[0]
     DrawBox("dt",_infX,_yy,_width,_height*.15)
-    //DrawBox("w",_infX-4,_yy+4,24,16)
-    //draw_sprite_ext(crate_base,0,_infX,_yy,.8,.8,0,c_white,1)
-    //draw_sprite_ext(kale_05,0,_infX+1,_yy-3,.8,.8,0,c_white,1)
-    
-    
-    
+
     
     _yy += _height*.15+_buffeBoxes
     _xEnd = _xx
@@ -114,6 +99,57 @@ if surface_exists(invetorySurf){
         draw_reset_align()
     }
     
+    if navInd == 0{
+        var _xx = 0
+        var _yy = 0
+        var totalPage = numSlotsW*numSlotsH
+        var _buffer = 5
+        _marg = 8
+        var _slotWidth = (_contentWidth - (_buffer*numSlotsW-1)-(_marg*2))/numSlotsW
+        var _slotHeight = (_contentHeight*.7 - (_buffer*numSlotsH-1-(_marg*2)))/numSlotsH
+        var _invW = _slotWidth*numSlotsW+_buffer*numSlotsW-1+_marg
+        var _invH = _slotHeight*numSlotsH+_buffer*numSlotsH-1+_marg*.5
+        var _x0 = _contentX+ _contentWidth-_invW
+        var _y0 =_contentY+_contentHeight-_invH
+        for(var i=0; i<totalPage; i++){
+            var x1 = _x0+_xx*_slotWidth+_xx*_buffer
+            var y1 = _y0 + _yy*_slotHeight+_yy*_buffer
+            var x2 = x1+_slotWidth
+            var y2 = y1+_slotHeight
+            //draw_rectangle(x1,y1,x2,y2,false)
+            
+            selector.pos.toX = _x0+selector.ind.x*_slotWidth+selector.ind.x*_buffer
+            selector.pos.toY = _y0 + selector.ind.y*_slotHeight+selector.ind.y*_buffer
+            var sobre = point_in_rectangle(_mxSurf,_mySurf,x1,y1,x2,y2)
+            if  sobre{
+                if selector.ind.x != _xx || selector.ind.y != _yy{
+                    //selector.ang = 30*(_xx>selector.ind.x?-1:1)
+                    
+                    selector.ind.x = _xx
+                    selector.ind.y = _yy
+                    selector.scale.x = 1.2
+                    selector.scale.y = 1.2
+                }
+                
+                if mouse_check_button_released(mb_left){
+                    selector.scale.x = .8
+                    selector.scale.y = .8
+                }
+            }
+            
+            DrawBox("dt",x1,y1,_slotWidth,_slotHeight)
+            
+            
+            _xx++
+            if _xx==numSlotsW{
+                _xx=0
+                _yy++
+            }
+        }
+        
+        DrawSelectBox(selector.pos.x,selector.pos.y,_slotWidth,_slotHeight,selector.ang,selector.scale.x,selector.scale.y)
+    }
+   
     
     #region Button Change Page
     
@@ -133,3 +169,5 @@ var mat = matrix_build(invetorySurfProps.pos.x,invetorySurfProps.pos.y,invetoryS
 matrix_set(matrix_world,mat)
 draw_surface(invetorySurf,-invetorySurfProps.w*.5,-invetorySurfProps.h*.5)
 matrix_set(matrix_world,matrix_build_identity())
+
+//draw_text(30,0,$"{_mxSurf}, {_mySurf} || {selector.pos.toX}, {selector.pos.toY}")

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"CreateDataBase",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"CreateDataBase",
+  "parent":{
+    "name":"DataBase",
+    "path":"folders/Scripts/InventorySys/DataBase.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

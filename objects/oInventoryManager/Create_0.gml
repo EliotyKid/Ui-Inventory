@@ -1,3 +1,4 @@
+global.pause = true
 show = true
 
 
@@ -68,3 +69,29 @@ navIndX = 0
 
 textSelectedColor = make_color_rgb(24,20,37)
 textUnselectedColor = make_color_rgb(194,133,105)
+
+
+
+numSlotsW = 5
+numSlotsH = 3
+totalSlots = 25
+inv = array_create(totalSlots,-1)
+
+
+selector = {
+    pos: {
+        x: GUI_W*.5,
+        y: GUI_H*1.5,
+        toX: GUI_W*.5,
+        toY: GUI_H*1.5
+    },
+    ang: 0,
+    ind: {
+        x: 0,
+        y: 0
+    },
+    scale: {
+        x: 1,
+        y: 1
+    }
+}

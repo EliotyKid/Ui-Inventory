@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"GetNextId",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"GetNextId",
+  "parent":{
+    "name":"Items",
+    "path":"folders/Scripts/InventorySys/Items.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

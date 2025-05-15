@@ -7,6 +7,9 @@ maxVsp = 2
 acc = .3
 dcc = .3
 
+
+
+#region State Machine
 LsmInit()
 
 LsmAdd("idle",{
@@ -36,3 +39,4 @@ LsmAddFreeState({
     }
   }  
 })
+#endregion

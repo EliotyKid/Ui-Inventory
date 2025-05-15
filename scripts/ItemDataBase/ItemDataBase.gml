@@ -1,0 +1,7 @@
+ITEM_DATABASE.Add(new ItemStakeable("Carrot",carrot_05,true))
+ITEM_DATABASE.Add(new ItemStakeable("Cauliflower",cauliflower_05,false))
+ITEM_DATABASE.Add(new ItemStakeable("Milk",milk,false))
+ITEM_DATABASE.Add(new ItemStakeable("Potato",potato_05,true))
+ITEM_DATABASE.Add(new ItemStakeable("Pumpkin",pumpkin_05,true))
+ITEM_DATABASE.Add(new ItemStakeable("Sunflower",sunflower_05,true))
+ITEM_DATABASE.Add(new ItemStakeable("Wood",wood,true))

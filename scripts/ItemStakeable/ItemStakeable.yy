@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"ItemStakeable",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ItemStakeable",
+  "parent":{
+    "name":"Items",
+    "path":"folders/Scripts/InventorySys/Items.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
