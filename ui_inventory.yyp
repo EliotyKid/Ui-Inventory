@@ -383,7 +383,6 @@
     {"id":{"name":"ItemUsable","path":"scripts/ItemUsable/ItemUsable.yy",},},
     {"id":{"name":"scr_local_state_machine_sys","path":"scripts/scr_local_state_machine_sys/scr_local_state_machine_sys.yy",},},
     {"id":{"name":"ScrInitialize","path":"scripts/ScrInitialize/ScrInitialize.yy",},},
-    {"id":{"name":"Script257","path":"scripts/Script257/Script257.yy",},},
     {"id":{"name":"Variables","path":"scripts/Variables/Variables.yy",},},
     {"id":{"name":"arrow_left","path":"sprites/arrow_left/arrow_left.yy",},},
     {"id":{"name":"arrow_right","path":"sprites/arrow_right/arrow_right.yy",},},

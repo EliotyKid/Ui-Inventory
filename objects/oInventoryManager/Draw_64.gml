@@ -102,7 +102,9 @@ if surface_exists(invetorySurf){
     if navInd == 0{
         var _xx = 0
         var _yy = 0
-        var totalPage = numSlotsW*numSlotsH
+        var _startIndex = indPage * slotsPerPage
+        var _remaining = array_length(inv) - _startIndex
+        var _slotsThisPage = min(slotsPerPage,_remaining)
         var _buffer = 5
         _marg = 8
         var _slotWidth = (_contentWidth - (_buffer*numSlotsW-1)-(_marg*2))/numSlotsW
@@ -111,7 +113,10 @@ if surface_exists(invetorySurf){
         var _invH = _slotHeight*numSlotsH+_buffer*numSlotsH-1+_marg*.5
         var _x0 = _contentX+ _contentWidth-_invW
         var _y0 =_contentY+_contentHeight-_invH
-        for(var i=0; i<totalPage; i++){
+        
+        
+        
+        for(var i=0; i<_slotsThisPage; i++){
             var x1 = _x0+_xx*_slotWidth+_xx*_buffer
             var y1 = _y0 + _yy*_slotHeight+_yy*_buffer
             var x2 = x1+_slotWidth
@@ -146,15 +151,49 @@ if surface_exists(invetorySurf){
                 _yy++
             }
         }
+        var _nw = numSlotsW-1
+        var _nh = numSlotsH-1
+        draw_set_color(textSelectedColor)
+        draw_set_align(1,1)
+        draw_text(_x0+_nw*_slotWidth+_nw*_buffer+_slotWidth*.5,_y0 + _nh*_slotHeight+_nh*_buffer+_slotHeight*.5,$"{indPage+1}/{numInvPages}")
+        draw_reset_align()
+        draw_set_color(-1)
         
         DrawSelectBox(selector.pos.x,selector.pos.y,_slotWidth,_slotHeight,selector.ang,selector.scale.x,selector.scale.y)
+        
     }
    
     
     #region Button Change Page
+    if indPage > 0{
+        var _sW = sprite_get_width(arrow_left)
+        var _sH = sprite_get_height(arrow_left)
+        var _x1 = _contentX-_sW*.5
+        var _y1 = _contentHeight*.5+_sH*.5
+        var _x2 = _x1+_sW
+        var _y2 = _y1+_sH
+        draw_sprite(arrow_left,0,_x1,_y1)
+        var _sobre = point_in_rectangle(_mxSurf,_mySurf,_x1,_y1,_x2,_y2)
+        if _sobre{
+            if mouse_check_button_pressed(mb_left) indPage--
+        }
+    }
     
+    if indPage < numInvPages-1{
+        var _sW = sprite_get_width(arrow_right)
+        var _sH = sprite_get_height(arrow_right)
+        var _x1 = _contentX+_contentWidth-_sW*.5
+        var _y1 = _contentHeight*.5+_sH*.5
+        var _x2 = _x1+_sW
+        var _y2 = _y1+_sH
+        draw_sprite(arrow_right,0,_x1,_y1)
+        var _sobre = point_in_rectangle(_mxSurf,_mySurf,_x1,_y1,_x2,_y2)
+        if _sobre{
+            if mouse_check_button_pressed(mb_left) indPage++
+        }
+    }
     
-    
+    indPage = clamp(indPage,0,numInvPages-1)
     #endregion
     
     surface_reset_target()

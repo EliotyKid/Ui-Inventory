@@ -74,8 +74,11 @@ textUnselectedColor = make_color_rgb(194,133,105)
 
 numSlotsW = 5
 numSlotsH = 3
-totalSlots = 25
+totalSlots = 24
+slotsPerPage = numSlotsW*numSlotsH-1
 inv = array_create(totalSlots,-1)
+numInvPages = ceil(totalSlots/(numSlotsW*numSlotsH))
+indPage = 0
 
 
 selector = {
