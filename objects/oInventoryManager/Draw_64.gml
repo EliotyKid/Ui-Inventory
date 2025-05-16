@@ -149,27 +149,28 @@ var _strH = string_height(_title)
                     selector.scale.x = .8
                     selector.scale.y = .8
                     
-                    
                     selectedSlot.x = selector.ind.x
                     selectedSlot.y = selector.ind.y
                     
-                    
                     selectedSlot.page = indPage
                     
-                    var _cI= _startIndex + _yy * numSlotsW + _xx
-                    var _sI = selector.selectedIndex
+                    var _cI= PosToIndiceInArray(_xx,_yy) //posição do array clicada
+                    var _sI = selector.selectedIndex //posição array ja selecionada | caso não tenha nada selecionada o valor = -1
                     //show_message($"cliecked: {_cI} || selected: {_sI}")
                     var _newSel = _cI
                     
-                    if _sI != -1{
-                        if inv[_sI] != -1{
-                            if inv[_cI] == -1{
+                    if _sI != -1{ //cheaca se a posiçao ja selecionada tem algo
+                        if inv[_sI] != -1{//checa se no array nessa posição tem algum item
+                            if inv[_cI] == -1{//checa se na posição clicada não tem nehum item item
                                 inv[_cI] = inv[_sI]
                                 inv[_sI] = -1
                                 _newSel = -1
                                 selectedSlot.x = -1
                                 selectedSlot.y = -1
-                            }else{
+                                
+                               
+                                
+                            }else{//caso tenha algum item na posição clicada
                                 if inv[_sI].id != inv[_cI].id{ //se os items o selecionado é diferente do que eu cliquei
                                     var _item = inv[_cI]
                                     inv[_cI] = inv[_sI]
@@ -178,15 +179,15 @@ var _strH = string_height(_title)
                                     selectedSlot.x = -1
                                     selectedSlot.y = -1
                                 }else{ //se os items o selecionado for igual do que eu cliquei
-                                    if _cI != _sI{
-                                        var total = inv[_cI].qtd + inv[_sI].qtd
-                                        if total < inv[_cI].maxQtd{
+                                    if _cI != _sI{//checa se as posições clicada e selecionada forem diferentes
+                                        var total = inv[_cI].qtd + inv[_sI].qtd //pega a soma das quantidades de items de cada
+                                        if total < inv[_cI].maxQtd{//caso a soma seja menor que a quantidade maxima possivel desse item por slot
                                             inv[_cI].qtd = total
                                             inv[_sI] = -1
                                             _newSel = -1
                                             selectedSlot.x = -1
                                             selectedSlot.y = -1
-                                        }else{
+                                        }else{//caso a soma ultrapasse a quantidade maxima
                                             var _resto = total-inv[_cI].maxQtd
                                             inv[_cI].qtd = 0
                                             inv[_sI].qtd = 0
@@ -196,6 +197,10 @@ var _strH = string_height(_title)
                                             selectedSlot.x = -1
                                             selectedSlot.y = -1
                                         }
+                                    }else{//se for a mesma posiça deselciona 
+                                        selectedSlot.x = -1
+                                        selectedSlot.y = -1
+                                        _newSel=-1
                                     }
                                 }
                             }
@@ -204,6 +209,51 @@ var _strH = string_height(_title)
                     
                     
                     selector.selectedIndex = _newSel
+                }
+                if mouse_check_button_pressed(mb_right){
+                    selector.scale.x = .8
+                    selector.scale.y = .8
+                    selectedSlot.page = indPage
+                    
+                    var _cI= PosToIndiceInArray(_xx,_yy) //posição do array clicada
+                    var _sI = selector.selectedIndex //posição array ja selecionada | caso não tenha nada selecionada o valor = -1
+                    if _sI != -1{ //cheaca se a posiçao ja selecionada tem algo
+                        if inv[_sI] != -1{//checa se no array nessa posição tem algum item
+                            if inv[_cI] == -1{
+                                var _item = variable_clone(inv[_sI])
+                                _item.qtd = 1
+                                inv[_cI] = _item
+                                inv[_sI].qtd --
+                                if inv[_sI].qtd<=0 {
+                                    inv[_sI] = -1
+                                    selectedSlot.x = -1
+                                    selectedSlot.y = -1
+                                    selector.selectedIndex = -1
+                                }
+                            }else{
+                                if inv[_cI].id == inv[_sI].id{
+                                    if _cI != _sI{
+                                        var _nextValue = inv[_cI].qtd + 1
+                                        if _nextValue <= inv[_cI].maxQtd {
+                                            inv[_cI].qtd ++
+                                            inv[_sI].qtd --
+                                            if inv[_sI].qtd<=0 {
+                                                inv[_sI] = -1
+                                                selectedSlot.x = -1
+                                                selectedSlot.y = -1
+                                                selector.selectedIndex = -1
+                                            }
+                                        }
+                                    }else{
+                                        selectedSlot.x = -1
+                                        selectedSlot.y = -1
+                                        selector.selectedIndex = -1
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
                 }
             }
             
@@ -243,7 +293,6 @@ var _strH = string_height(_title)
         draw_set_color(-1)
         
         DrawSelectBox(selector.pos.x,selector.pos.y,_slotWidth,_slotHeight,selector.ang,selector.scale.x,selector.scale.y)
-        
     }
    
     
@@ -258,7 +307,11 @@ var _strH = string_height(_title)
         draw_sprite(arrow_left,0,_x1,_y1)
         var _sobre = point_in_rectangle(_mxSurf,_mySurf,_x1,_y1,_x2,_y2)
         if _sobre{
-            if mouse_check_button_pressed(mb_left) indPage--
+            if mouse_check_button_pressed(mb_left) {
+                indPage--
+                selector.ind.x = numSlotsW-2
+                selector.ind.y = numSlotsH-1
+            }
         }
     }
     
@@ -272,7 +325,11 @@ var _strH = string_height(_title)
         draw_sprite(arrow_right,0,_x1,_y1)
         var _sobre = point_in_rectangle(_mxSurf,_mySurf,_x1,_y1,_x2,_y2)
         if _sobre{
-            if mouse_check_button_pressed(mb_left) indPage++
+            if mouse_check_button_pressed(mb_left) {
+                indPage++
+                selector.ind.x = 0
+                selector.ind.y = 0
+            }
         }
     }
     

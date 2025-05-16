@@ -110,5 +110,23 @@ selector = {
         x: 1,
         y: 1
     },
-    selectedIndex: -1
+    selectedIndex: -1,
+}
+
+PosToIndiceInArray = function(_xx,_yy){
+    var _startIndex = indPage * slotsPerPage
+    var _indice= _startIndex + _yy * numSlotsW + _xx
+    return _indice
+}
+
+IndiceArrayToPos = function(_indice){
+    var _localIndex = _indice - (indPage*slotsPerPage)
+    if _localIndex<0 ||_localIndex>=slotsPerPage return undefined
+        
+    var _xx = _localIndex mod numSlotsW
+    var _yy = floor(_localIndex/numSlotsW)
+    return {
+        x: _xx,
+        y: _yy
+    }
 }

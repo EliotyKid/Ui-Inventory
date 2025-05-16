@@ -39,3 +39,5 @@ selector.ind.x = clamp(selector.ind.x,0,numSlotsW-1)
 
 selector.ind.y += keyboard_check_pressed(vk_down)-keyboard_check_pressed(vk_up)
 selector.ind.y = clamp(selector.ind.y,0,numSlotsH-1)
+
+

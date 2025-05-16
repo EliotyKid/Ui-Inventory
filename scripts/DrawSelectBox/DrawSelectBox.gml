@@ -12,6 +12,7 @@ function DrawSelectBox(_x, _y, _w, _h, _angle=0, _scaleX=1, _scaleY=1) {
     surface_set_target(surf);
     draw_clear_alpha(c_white, 0); // limpa com transparência
 
+    
     // Desenha os cantos na surface, sem rotação/escala
     draw_sprite(selectbox_tl, 0, 2, 2);
     draw_sprite(selectbox_bl, 0, 2, surf_h - 6-4);
