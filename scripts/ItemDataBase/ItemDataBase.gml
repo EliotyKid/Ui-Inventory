@@ -1,4 +1,4 @@
-ITEM_DATABASE.Add(new ItemStakeable("Carrot",carrot_05,true))
+ITEM_DATABASE.Add(new ItemStakeable("Carrot",carrot_05,true,10))
 ITEM_DATABASE.Add(new ItemStakeable("Cauliflower",cauliflower_05,false))
 ITEM_DATABASE.Add(new ItemStakeable("Milk",milk,false))
 ITEM_DATABASE.Add(new ItemStakeable("Potato",potato_05,true))

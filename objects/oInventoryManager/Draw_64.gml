@@ -29,6 +29,14 @@ if surface_exists(invetorySurf){
     var _infX = _xStart - _dist * containerInfVal[0]
     DrawBox("dt",_infX,_yy,_width,_height*.15)
 
+    var _title = "Inventory"
+    var _strW = string_width(_title)
+var _strH = string_height(_title)
+    draw_set_color(textSelectedColor)
+    draw_set_align(1,1)
+    draw_text(_infX+_strW*.5+4,_yy+_strH*.5,"Inventory")
+    draw_reset_align()
+    
     
     _yy += _height*.15+_buffeBoxes
     _xEnd = _xx
@@ -116,6 +124,7 @@ if surface_exists(invetorySurf){
         
         
         
+        
         for(var i=0; i<_slotsThisPage; i++){
             var x1 = _x0+_xx*_slotWidth+_xx*_buffer
             var y1 = _y0 + _yy*_slotHeight+_yy*_buffer
@@ -136,14 +145,88 @@ if surface_exists(invetorySurf){
                     selector.scale.y = 1.2
                 }
                 
-                if mouse_check_button_released(mb_left){
+                if mouse_check_button_pressed(mb_left){
                     selector.scale.x = .8
                     selector.scale.y = .8
+                    
+                    
+                    selectedSlot.x = selector.ind.x
+                    selectedSlot.y = selector.ind.y
+                    
+                    
+                    selectedSlot.page = indPage
+                    
+                    var _cI= _startIndex + _yy * numSlotsW + _xx
+                    var _sI = selector.selectedIndex
+                    //show_message($"cliecked: {_cI} || selected: {_sI}")
+                    var _newSel = _cI
+                    
+                    if _sI != -1{
+                        if inv[_sI] != -1{
+                            if inv[_cI] == -1{
+                                inv[_cI] = inv[_sI]
+                                inv[_sI] = -1
+                                _newSel = -1
+                                selectedSlot.x = -1
+                                selectedSlot.y = -1
+                            }else{
+                                if inv[_sI].id != inv[_cI].id{ //se os items o selecionado é diferente do que eu cliquei
+                                    var _item = inv[_cI]
+                                    inv[_cI] = inv[_sI]
+                                    inv[_sI] = _item
+                                    _newSel = -1
+                                    selectedSlot.x = -1
+                                    selectedSlot.y = -1
+                                }else{ //se os items o selecionado for igual do que eu cliquei
+                                    if _cI != _sI{
+                                        var total = inv[_cI].qtd + inv[_sI].qtd
+                                        if total < inv[_cI].maxQtd{
+                                            inv[_cI].qtd = total
+                                            inv[_sI] = -1
+                                            _newSel = -1
+                                            selectedSlot.x = -1
+                                            selectedSlot.y = -1
+                                        }else{
+                                            var _resto = total-inv[_cI].maxQtd
+                                            inv[_cI].qtd = 0
+                                            inv[_sI].qtd = 0
+                                            inv[_cI].qtd = inv[_cI].maxQtd
+                                            inv[_sI].qtd = _resto
+                                            _newSel = -1
+                                            selectedSlot.x = -1
+                                            selectedSlot.y = -1
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    
+                    selector.selectedIndex = _newSel
                 }
             }
             
-            DrawBox("dt",x1,y1,_slotWidth,_slotHeight)
+            var _isSelected = _xx == selectedSlot.x && _yy == selectedSlot.y && selectedSlot.page == indPage
             
+            DrawBox(_isSelected?"w":"dt",x1,y1,_slotWidth,_slotHeight)
+            
+            if inv[_startIndex+i] != -1{
+                var _item = inv[_startIndex+i]
+                var _spr = _item.spriteIndex
+                var _sprW = sprite_get_width(_spr)
+                var _sprH = sprite_get_height(_spr)
+                var _slotCx = x1+_slotWidth*.5
+                var _slotCy = y1+_slotHeight*.5
+                var drawX = _slotCx-_sprW*.5
+                var drawY = _slotCy-_sprH*.5
+                
+                draw_sprite(_spr,0,drawX,drawY)
+                
+                if _item.stakeable{
+                    draw_text(drawX,drawY,_item.qtd)
+                }
+            }
             
             _xx++
             if _xx==numSlotsW{
@@ -201,6 +284,7 @@ if surface_exists(invetorySurf){
     invetorySurf = surface_create(invetorySurfProps.w,invetorySurfProps.h)
 }
 
+//draw_text(30,0,$"{selectedSlot} || {selector.ind}")
 draw_set_font(-1)
 
 var mat = matrix_build(invetorySurfProps.pos.x,invetorySurfProps.pos.y,invetorySurfProps.pos.z,invetorySurfProps.angle.x,invetorySurfProps.angle.y,invetorySurfProps.angle.z,invetorySurfProps.scale.x,invetorySurfProps.scale.y,invetorySurfProps.scale.z)

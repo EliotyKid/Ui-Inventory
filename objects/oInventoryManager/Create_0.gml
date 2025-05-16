@@ -80,6 +80,19 @@ inv = array_create(totalSlots,-1)
 numInvPages = ceil(totalSlots/(numSlotsW*numSlotsH))
 indPage = 0
 
+inv[0]=(ITEM_DATABASE.FindById(0).item)
+inv[0].qtd = 5
+inv[3]=(ITEM_DATABASE.FindById(3).item)
+inv[5]=(ITEM_DATABASE.FindById(2).item)
+inv[6]=(ITEM_DATABASE.FindById(0).item)
+inv[17]=(ITEM_DATABASE.FindById(0).item)
+inv[6].qtd = 8
+//show_message(ITEM_DATABASE.List())
+selectedSlot = {
+    x: -1,
+    y: -1,
+    page: -1
+}
 
 selector = {
     pos: {
@@ -96,5 +109,6 @@ selector = {
     scale: {
         x: 1,
         y: 1
-    }
+    },
+    selectedIndex: -1
 }

@@ -15,7 +15,7 @@ with global.data {
             if __itemDataBase[i].id == _id{
                 return {
                     pos: i,
-                    item: __itemDataBase[i]
+                    item: variable_clone(__itemDataBase[i])
                 }
             }
         }
@@ -31,7 +31,7 @@ with global.data {
             if __itemDataBase[i].name == _name{
                 return {
                     pos: i,
-                    item: __itemDataBase[i]
+                    item: variable_clone(__itemDataBase[i])
                 }
             }
         }
@@ -43,7 +43,7 @@ with global.data {
     ///@desc - List all items in DataBase
     ///@return {Array} 
     List = function(){
-        return __itemDataBase
+        return variable_clone(__itemDataBase)
     }
 }
 
