@@ -8,7 +8,6 @@ acc = .3
 dcc = .3
 
 
-
 #region State Machine
 LsmInit()
 
@@ -37,6 +36,6 @@ LsmAddFreeState({
             instance_create_depth(0,0,-9999,oInventoryManager)
         }
     }
-  }  
+  } 
 })
 #endregion

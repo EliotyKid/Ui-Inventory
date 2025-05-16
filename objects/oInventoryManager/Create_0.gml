@@ -72,21 +72,26 @@ textUnselectedColor = make_color_rgb(194,133,105)
 
 
 
+
 numSlotsW = 5
 numSlotsH = 3
 totalSlots = 24
 slotsPerPage = numSlotsW*numSlotsH-1
-inv = array_create(totalSlots,-1)
+if global.playerInventory == -1{
+    global.playerInventory = array_create(totalSlots,-1)
+    global.playerInventory[0]=(ITEM_DATABASE.FindById(0).item)
+    global.playerInventory[0].qtd = 5
+    global.playerInventory[3]=(ITEM_DATABASE.FindById(3).item)
+    global.playerInventory[5]=(ITEM_DATABASE.FindById(2).item)
+    global.playerInventory[6]=(ITEM_DATABASE.FindById(0).item)
+    global.playerInventory[17]=(ITEM_DATABASE.FindById(0).item)
+    global.playerInventory[6].qtd = 8
+}
+inv = global.playerInventory
 numInvPages = ceil(totalSlots/(numSlotsW*numSlotsH))
 indPage = 0
 
-inv[0]=(ITEM_DATABASE.FindById(0).item)
-inv[0].qtd = 5
-inv[3]=(ITEM_DATABASE.FindById(3).item)
-inv[5]=(ITEM_DATABASE.FindById(2).item)
-inv[6]=(ITEM_DATABASE.FindById(0).item)
-inv[17]=(ITEM_DATABASE.FindById(0).item)
-inv[6].qtd = 8
+
 //show_message(ITEM_DATABASE.List())
 selectedSlot = {
     x: -1,

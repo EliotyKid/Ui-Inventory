@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"CreateInventory",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"CreateInventory",
+  "parent":{
+    "name":"InventorySys",
+    "path":"folders/Scripts/InventorySys.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

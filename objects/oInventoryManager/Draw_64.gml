@@ -22,7 +22,7 @@ if surface_exists(invetorySurf){
     var _xx = _buffeBoxes
     var _yy = _buffeBoxes
     
-    //first
+    #region first content
     var _xEnd = _xx
     var _xStart = containerInfX[0]
     var _dist = _xStart - _xEnd
@@ -31,26 +31,32 @@ if surface_exists(invetorySurf){
 
     var _title = "Inventory"
     var _strW = string_width(_title)
-var _strH = string_height(_title)
+    var _strH = string_height(_title)
     draw_set_color(textSelectedColor)
     draw_set_align(1,1)
     draw_text(_infX+_strW*.5+4,_yy+_strH*.5,"Inventory")
     draw_reset_align()
+    #endregion
     
-    
+    #region second content
     _yy += _height*.15+_buffeBoxes
     _xEnd = _xx
     _xStart = containerInfX[1]
     _dist = _xStart - _xEnd
     _infX = _xStart - _dist * containerInfVal[1]
     DrawBox("w",_infX,_yy,_width,_height*.60)
+    #endregion
+    
+    #region third content
+  
     _yy += _buffeBoxes + _height*.60 
-
     _xEnd = _xx
     _xStart = containerInfX[2]
     _dist = _xStart - _xEnd
     _infX = _xStart - _dist * containerInfVal[2]
     DrawBox("lt",_infX,_yy,_width,_height*.25)
+    #endregion
+    
     #endregion
     
     #region second div
@@ -67,6 +73,7 @@ var _strH = string_height(_title)
     DrawBox("dt",_containerX,_containerY,_containerWidth,_containerHeight)
     #endregion
     
+    #region desenhando a navbar e o fundo das paginas
     var _marg = 2
     var _indiceWidth = (_containerWidth-_marg*2)/array_length(navItems)
     var _indiceHeight = _containerHeight*.15
@@ -81,8 +88,8 @@ var _strH = string_height(_title)
     var _contentHeight = _containerHeight-_indiceHeight
     DrawBox("lt",_contentX,_contentY,_contentWidth,_contentHeight)
     
-    DrawBox("lt",navIndX,_indiceY,_indiceWidth,_indiceHeight+1,,,,false)
     
+    DrawBox("lt",navIndX,_indiceY,_indiceWidth,_indiceHeight+1,,,,false)
     
     
     for(var i=0; i<array_length(navItems); i++){
@@ -106,8 +113,11 @@ var _strH = string_height(_title)
         draw_set_color(-1)
         draw_reset_align()
     }
+    #endregion
     
+    #region desenhando o a primeira pagina da navbar | inventario de items
     if navInd == 0{
+        #region slots inventario
         var _xx = 0
         var _yy = 0
         var _startIndex = indPage * slotsPerPage
@@ -121,9 +131,6 @@ var _strH = string_height(_title)
         var _invH = _slotHeight*numSlotsH+_buffer*numSlotsH-1+_marg*.5
         var _x0 = _contentX+ _contentWidth-_invW
         var _y0 =_contentY+_contentHeight-_invH
-        
-        
-        
         
         for(var i=0; i<_slotsThisPage; i++){
             var x1 = _x0+_xx*_slotWidth+_xx*_buffer
@@ -161,6 +168,8 @@ var _strH = string_height(_title)
                     
                     if _sI != -1{ //cheaca se a posiçao ja selecionada tem algo
                         if inv[_sI] != -1{//checa se no array nessa posição tem algum item
+                            
+                            
                             if inv[_cI] == -1{//checa se na posição clicada não tem nehum item item
                                 inv[_cI] = inv[_sI]
                                 inv[_sI] = -1
@@ -192,7 +201,8 @@ var _strH = string_height(_title)
                                             inv[_cI].qtd = 0
                                             inv[_sI].qtd = 0
                                             inv[_cI].qtd = inv[_cI].maxQtd
-                                            inv[_sI].qtd = _resto
+                                            inv[_sI].qtd = _resto 
+                                            if inv[_sI].qtd <= 0 inv[_sI] = -1
                                             _newSel = -1
                                             selectedSlot.x = -1
                                             selectedSlot.y = -1
@@ -273,9 +283,22 @@ var _strH = string_height(_title)
                 
                 draw_sprite(_spr,0,drawX,drawY)
                 
-                if _item.stakeable{
-                    draw_text(drawX,drawY,_item.qtd)
+                switch _item.type{
+                    case ITEMS_TYPE.DURABILITY:
+                        
+                        break;
+                    case ITEMS_TYPE.STAKEABLE:
+                        draw_text(drawX,drawY,_item.qtd)
+                        break
+                    case ITEMS_TYPE.USABLE:
+                        if _item.stakeable{
+                            draw_text(drawX,drawY,_item.qtd)
+                        }
+                        break
                 }
+                
+                
+                
             }
             
             _xx++
@@ -292,49 +315,122 @@ var _strH = string_height(_title)
         draw_reset_align()
         draw_set_color(-1)
         
+        #endregion
+        
+        #region desenhando o seletor
         DrawSelectBox(selector.pos.x,selector.pos.y,_slotWidth,_slotHeight,selector.ang,selector.scale.x,selector.scale.y)
+        #endregion
+        
+        #region //usando item selecionado
+        if keyboard_check_pressed(vk_space){
+            if selector.selectedIndex != -1{
+                if inv[selector.selectedIndex] != -1{
+                    if inv[selector.selectedIndex].type == ITEMS_TYPE.USABLE{
+                        script_execute(inv[selector.selectedIndex].use)
+                        inv[selector.selectedIndex].qtd --
+                        if inv[selector.selectedIndex].qtd <=0 {
+                            inv[selector.selectedIndex] = -1
+                            selector.selectedIndex = -1
+                            selectedSlot.x = -1
+                            selectedSlot.y = -1
+                        }
+                        
+                    }
+                }
+            }
+        }
+        #endregion
+        
+        #region Button Change Page
+        if indPage > 0{
+            var _sW = sprite_get_width(arrow_left)
+            var _sH = sprite_get_height(arrow_left)
+            var _x1 = _contentX-_sW*.5
+            var _y1 = _contentHeight*.5+_sH*.5
+            var _x2 = _x1+_sW
+            var _y2 = _y1+_sH
+            draw_sprite(arrow_left,0,_x1,_y1)
+            var _sobre = point_in_rectangle(_mxSurf,_mySurf,_x1,_y1,_x2,_y2)
+            if _sobre{
+                if mouse_check_button_pressed(mb_left) {
+                    indPage--
+                    selector.ind.x = numSlotsW-2
+                    selector.ind.y = numSlotsH-1
+                }
+            }
+        }
+        
+        if indPage < numInvPages-1{
+            var _sW = sprite_get_width(arrow_right)
+            var _sH = sprite_get_height(arrow_right)
+            var _x1 = _contentX+_contentWidth-_sW*.5
+            var _y1 = _contentHeight*.5+_sH*.5
+            var _x2 = _x1+_sW
+            var _y2 = _y1+_sH
+            draw_sprite(arrow_right,0,_x1,_y1)
+            var _sobre = point_in_rectangle(_mxSurf,_mySurf,_x1,_y1,_x2,_y2)
+            if _sobre{
+                if mouse_check_button_pressed(mb_left) {
+                    indPage++
+                    selector.ind.x = 0
+                    selector.ind.y = 0
+                }
+            }
+        }
+        
+        indPage = clamp(indPage,0,numInvPages-1)
+        #endregion
+    }
+    #endregion
+    
+    #endregion
+    
+    
+    if keyboard_check(vk_shift){
+        if keyboard_check_released(ord("Q")){
+            if selector.selectedIndex != -1{
+                if inv[selector.selectedIndex] != -1{
+                    instance_create_layer(oPlayer.x,oPlayer.y,"Instances",oDrop,{
+                        item: inv[selector.selectedIndex]   
+                    })
+                    
+                    inv[selector.selectedIndex] = -1
+                    selector.selectedIndex = -1
+                    selectedSlot.x = -1
+                    selectedSlot.y = -1
+                    
+                }
+            }
+        }
+    }else{
+        if keyboard_check_released(ord("Q")){
+            if selector.selectedIndex != -1{
+                if inv[selector.selectedIndex] != -1{
+                    if inv[selector.selectedIndex].type == ITEMS_TYPE.STAKEABLE || inv[selector.selectedIndex].type == ITEMS_TYPE.USABLE{
+                        inv[selector.selectedIndex].qtd --
+                        instance_create_layer(oPlayer.x,oPlayer.y,"Instances",oDrop,{
+                            item: inv[selector.selectedIndex]   
+                        })
+                        if inv[selector.selectedIndex].qtd <=0 {
+                            inv[selector.selectedIndex] = -1
+                            selector.selectedIndex = -1
+                            selectedSlot.x = -1
+                            selectedSlot.y = -1
+                        }
+                    }else{
+                        instance_create_layer(oPlayer.x,oPlayer.y,"Instances",oDrop,{
+                            item: inv[selector.selectedIndex]   
+                        })
+                        inv[selector.selectedIndex] = -1
+                        selector.selectedIndex = -1
+                        selectedSlot.x = -1
+                        selectedSlot.y = -1
+                    }
+                }
+            }
+        }
     }
    
-    
-    #region Button Change Page
-    if indPage > 0{
-        var _sW = sprite_get_width(arrow_left)
-        var _sH = sprite_get_height(arrow_left)
-        var _x1 = _contentX-_sW*.5
-        var _y1 = _contentHeight*.5+_sH*.5
-        var _x2 = _x1+_sW
-        var _y2 = _y1+_sH
-        draw_sprite(arrow_left,0,_x1,_y1)
-        var _sobre = point_in_rectangle(_mxSurf,_mySurf,_x1,_y1,_x2,_y2)
-        if _sobre{
-            if mouse_check_button_pressed(mb_left) {
-                indPage--
-                selector.ind.x = numSlotsW-2
-                selector.ind.y = numSlotsH-1
-            }
-        }
-    }
-    
-    if indPage < numInvPages-1{
-        var _sW = sprite_get_width(arrow_right)
-        var _sH = sprite_get_height(arrow_right)
-        var _x1 = _contentX+_contentWidth-_sW*.5
-        var _y1 = _contentHeight*.5+_sH*.5
-        var _x2 = _x1+_sW
-        var _y2 = _y1+_sH
-        draw_sprite(arrow_right,0,_x1,_y1)
-        var _sobre = point_in_rectangle(_mxSurf,_mySurf,_x1,_y1,_x2,_y2)
-        if _sobre{
-            if mouse_check_button_pressed(mb_left) {
-                indPage++
-                selector.ind.x = 0
-                selector.ind.y = 0
-            }
-        }
-    }
-    
-    indPage = clamp(indPage,0,numInvPages-1)
-    #endregion
     
     surface_reset_target()
 }else{
