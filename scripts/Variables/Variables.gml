@@ -1,5 +1,5 @@
-#macro GUI_W 240
-#macro GUI_H 135
+#macro GUI_W 720
+#macro GUI_H 405
 
 enum ITEMS_TYPE{
     BASE,
@@ -14,4 +14,12 @@ global.pause = false
 
 //global.playerInventory = new Inventory(24)
 
-global.playerInventory = -1
+
+global.playerInventory = array_create(24,-1)
+global.playerInventory[0]=(ITEM_DATABASE.FindById(0).item)
+global.playerInventory[0].qtd = 5
+global.playerInventory[3]=(ITEM_DATABASE.FindById(3).item)
+global.playerInventory[5]=(ITEM_DATABASE.FindById(2).item)
+global.playerInventory[6]=(ITEM_DATABASE.FindById(0).item)
+global.playerInventory[17]=(ITEM_DATABASE.FindById(0).item)
+global.playerInventory[6].qtd = 8

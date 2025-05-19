@@ -1,5 +1,7 @@
 global.pause = true
 show = true
+scl = ceil(GUI_W/240)
+
 
 
 invetorySurf = -1
@@ -69,6 +71,7 @@ navIndX = 0
 
 textSelectedColor = make_color_rgb(24,20,37)
 textUnselectedColor = make_color_rgb(194,133,105)
+textDescColor = make_color_rgb(139,155,180)
 
 
 
@@ -77,16 +80,6 @@ numSlotsW = 5
 numSlotsH = 3
 totalSlots = 24
 slotsPerPage = numSlotsW*numSlotsH-1
-if global.playerInventory == -1{
-    global.playerInventory = array_create(totalSlots,-1)
-    global.playerInventory[0]=(ITEM_DATABASE.FindById(0).item)
-    global.playerInventory[0].qtd = 5
-    global.playerInventory[3]=(ITEM_DATABASE.FindById(3).item)
-    global.playerInventory[5]=(ITEM_DATABASE.FindById(2).item)
-    global.playerInventory[6]=(ITEM_DATABASE.FindById(0).item)
-    global.playerInventory[17]=(ITEM_DATABASE.FindById(0).item)
-    global.playerInventory[6].qtd = 8
-}
 inv = global.playerInventory
 numInvPages = ceil(totalSlots/(numSlotsW*numSlotsH))
 indPage = 0

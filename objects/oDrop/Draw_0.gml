@@ -1,0 +1,1 @@
+draw_sprite(item.spriteIndex,0,x,y)

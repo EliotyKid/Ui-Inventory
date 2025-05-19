@@ -1,6 +1,6 @@
-function DrawSelectBox(_x, _y, _w, _h, _angle=0, _scaleX=1, _scaleY=1) {
-    var surf_w = _w+8;
-    var surf_h = _h+8;
+function DrawSelectBox(_x, _y, _w, _h, _angle=0, _scaleX=1, _scaleY=1,_sprScale=1) {
+    var surf_w = _w+8*_sprScale;
+    var surf_h = _h+8*_sprScale;
 
     // Criar surface temporária
     var surf = -1;
@@ -14,10 +14,10 @@ function DrawSelectBox(_x, _y, _w, _h, _angle=0, _scaleX=1, _scaleY=1) {
 
     
     // Desenha os cantos na surface, sem rotação/escala
-    draw_sprite(selectbox_tl, 0, 2, 2);
-    draw_sprite(selectbox_bl, 0, 2, surf_h - 6-4);
-    draw_sprite(selectbox_br, 0, surf_w - 6-4, surf_h - 6-4);
-    draw_sprite(selectbox_tr, 0, surf_w - 6-4, 2);
+    draw_sprite_ext(selectbox_tl, 0, 2*_sprScale, 2*_sprScale,_sprScale,_sprScale,0,c_white,1);
+    draw_sprite_ext(selectbox_bl, 0, 2*_sprScale, surf_h - 6*_sprScale-4*_sprScale,_sprScale,_sprScale,0,c_white,1);
+    draw_sprite_ext(selectbox_br, 0, surf_w - 6*_sprScale-4*_sprScale, surf_h - 6*_sprScale-4*_sprScale,_sprScale,_sprScale,0,c_white,1);
+    draw_sprite_ext(selectbox_tr, 0, surf_w - 6*_sprScale-4*_sprScale, 2*_sprScale,_sprScale,_sprScale,0,c_white,1);
 
     // Volta para a surface anterior
     surface_reset_target();

@@ -27,14 +27,13 @@ if surface_exists(invetorySurf){
     var _xStart = containerInfX[0]
     var _dist = _xStart - _xEnd
     var _infX = _xStart - _dist * containerInfVal[0]
-    DrawBox("dt",_infX,_yy,_width,_height*.15)
+    DrawBox("lt",_infX,_yy,_width,_height*.15,scl)
 
     var _title = "Inventory"
-    var _strW = string_width(_title)
-    var _strH = string_height(_title)
+    
     draw_set_color(textSelectedColor)
     draw_set_align(1,1)
-    draw_text(_infX+_strW*.5+4,_yy+_strH*.5,"Inventory")
+    draw_text(_infX+_width*.5,_yy+(_height*.15)*.5,_title)
     draw_reset_align()
     #endregion
     
@@ -44,7 +43,7 @@ if surface_exists(invetorySurf){
     _xStart = containerInfX[1]
     _dist = _xStart - _xEnd
     _infX = _xStart - _dist * containerInfVal[1]
-    DrawBox("w",_infX,_yy,_width,_height*.60)
+    DrawBox("w",_infX,_yy,_width,_height*.60,scl)
     #endregion
     
     #region third content
@@ -54,7 +53,7 @@ if surface_exists(invetorySurf){
     _xStart = containerInfX[2]
     _dist = _xStart - _xEnd
     _infX = _xStart - _dist * containerInfVal[2]
-    DrawBox("lt",_infX,_yy,_width,_height*.25)
+    DrawBox("lt",_infX,_yy,_width,_height*.25,scl)
     #endregion
     
     #endregion
@@ -70,26 +69,27 @@ if surface_exists(invetorySurf){
     var _dist = _containerXStart - _containerXEnd
     var _containerX = _containerXStart- _dist * invA
     var _containerY = _buffeBoxes
-    DrawBox("dt",_containerX,_containerY,_containerWidth,_containerHeight)
+    DrawBox("dt",_containerX,_containerY,_containerWidth,_containerHeight,scl)
     #endregion
     
     #region desenhando a navbar e o fundo das paginas
-    var _marg = 2
+    var _marg = 2*scl
     var _indiceWidth = (_containerWidth-_marg*2)/array_length(navItems)
     var _indiceHeight = _containerHeight*.15
     var _indiceX = _containerX+_marg + navInd*_indiceWidth
     var _indiceY = _containerY+_marg
-    navIndX = Approach(navIndX,_indiceX,8)
+    navIndX = Approach(navIndX,_indiceX,8*scl)
+    navIndX = clamp(navIndX,_containerX+_marg,_containerX+_marg + (array_length(navItems)-1)*_indiceWidth)
 
     
     var _contentX = _containerX+_marg
     var _contentY = _containerY+_marg+ _indiceHeight*.7
     var _contentWidth = _containerWidth-_marg*2
     var _contentHeight = _containerHeight-_indiceHeight
-    DrawBox("lt",_contentX,_contentY,_contentWidth,_contentHeight)
+    DrawBox("lt",_contentX,_contentY,_contentWidth,_contentHeight,scl)
     
     
-    DrawBox("lt",navIndX,_indiceY,_indiceWidth,_indiceHeight+1,,,,false)
+    DrawBox("lt",navIndX,_indiceY,_indiceWidth,_indiceHeight+1,scl,,,false)
     
     
     for(var i=0; i<array_length(navItems); i++){
@@ -123,8 +123,8 @@ if surface_exists(invetorySurf){
         var _startIndex = indPage * slotsPerPage
         var _remaining = array_length(inv) - _startIndex
         var _slotsThisPage = min(slotsPerPage,_remaining)
-        var _buffer = 5
-        _marg = 8
+        var _buffer = 5*scl
+        _marg = 8*scl
         var _slotWidth = (_contentWidth - (_buffer*numSlotsW-1)-(_marg*2))/numSlotsW
         var _slotHeight = (_contentHeight*.7 - (_buffer*numSlotsH-1-(_marg*2)))/numSlotsH
         var _invW = _slotWidth*numSlotsW+_buffer*numSlotsW-1+_marg
@@ -141,6 +141,8 @@ if surface_exists(invetorySurf){
             
             selector.pos.toX = _x0+selector.ind.x*_slotWidth+selector.ind.x*_buffer
             selector.pos.toY = _y0 + selector.ind.y*_slotHeight+selector.ind.y*_buffer
+            
+            #region logica e movimentação sobre o slot
             var sobre = point_in_rectangle(_mxSurf,_mySurf,x1,y1,x2,y2)
             if  sobre{
                 if selector.ind.x != _xx || selector.ind.y != _yy{
@@ -266,22 +268,23 @@ if surface_exists(invetorySurf){
                     
                 }
             }
+            #endregion
             
             var _isSelected = _xx == selectedSlot.x && _yy == selectedSlot.y && selectedSlot.page == indPage
             
-            DrawBox(_isSelected?"w":"dt",x1,y1,_slotWidth,_slotHeight)
+            DrawBox(_isSelected?"w":"dt",x1,y1,_slotWidth,_slotHeight,scl)
             
             if inv[_startIndex+i] != -1{
                 var _item = inv[_startIndex+i]
                 var _spr = _item.spriteIndex
-                var _sprW = sprite_get_width(_spr)
-                var _sprH = sprite_get_height(_spr)
+                var _sprW = sprite_get_width(_spr)*scl
+                var _sprH = sprite_get_height(_spr)*scl
                 var _slotCx = x1+_slotWidth*.5
                 var _slotCy = y1+_slotHeight*.5
                 var drawX = _slotCx-_sprW*.5
                 var drawY = _slotCy-_sprH*.5
                 
-                draw_sprite(_spr,0,drawX,drawY)
+                draw_sprite_ext(_spr,0,drawX,drawY,scl,scl,0,c_white,1)
                 
                 switch _item.type{
                     case ITEMS_TYPE.DURABILITY:
@@ -318,7 +321,7 @@ if surface_exists(invetorySurf){
         #endregion
         
         #region desenhando o seletor
-        DrawSelectBox(selector.pos.x,selector.pos.y,_slotWidth,_slotHeight,selector.ang,selector.scale.x,selector.scale.y)
+        DrawSelectBox(selector.pos.x,selector.pos.y,_slotWidth,_slotHeight,selector.ang,selector.scale.x,selector.scale.y,scl)
         #endregion
         
         #region //usando item selecionado
@@ -343,13 +346,13 @@ if surface_exists(invetorySurf){
         
         #region Button Change Page
         if indPage > 0{
-            var _sW = sprite_get_width(arrow_left)
-            var _sH = sprite_get_height(arrow_left)
+            var _sW = sprite_get_width(arrow_left)*scl
+            var _sH = sprite_get_height(arrow_left)*scl
             var _x1 = _contentX-_sW*.5
             var _y1 = _contentHeight*.5+_sH*.5
             var _x2 = _x1+_sW
             var _y2 = _y1+_sH
-            draw_sprite(arrow_left,0,_x1,_y1)
+            draw_sprite_ext(arrow_left,0,_x1,_y1,scl,scl,0,c_white,1)
             var _sobre = point_in_rectangle(_mxSurf,_mySurf,_x1,_y1,_x2,_y2)
             if _sobre{
                 if mouse_check_button_pressed(mb_left) {
@@ -361,13 +364,13 @@ if surface_exists(invetorySurf){
         }
         
         if indPage < numInvPages-1{
-            var _sW = sprite_get_width(arrow_right)
-            var _sH = sprite_get_height(arrow_right)
+            var _sW = sprite_get_width(arrow_right)*scl
+            var _sH = sprite_get_height(arrow_right)*scl
             var _x1 = _contentX+_contentWidth-_sW*.5
             var _y1 = _contentHeight*.5+_sH*.5
             var _x2 = _x1+_sW
             var _y2 = _y1+_sH
-            draw_sprite(arrow_right,0,_x1,_y1)
+            draw_sprite_ext(arrow_right,0,_x1,_y1,scl,scl,0,c_white,1)
             var _sobre = point_in_rectangle(_mxSurf,_mySurf,_x1,_y1,_x2,_y2)
             if _sobre{
                 if mouse_check_button_pressed(mb_left) {
@@ -380,57 +383,100 @@ if surface_exists(invetorySurf){
         
         indPage = clamp(indPage,0,numInvPages-1)
         #endregion
-    }
-    #endregion
+        
+        #region desenhando infos ao lado do slot
     
-    #endregion
-    
-    
-    if keyboard_check(vk_shift){
-        if keyboard_check_released(ord("Q")){
-            if selector.selectedIndex != -1{
-                if inv[selector.selectedIndex] != -1{
-                    instance_create_layer(oPlayer.x,oPlayer.y,"Instances",oDrop,{
-                        item: inv[selector.selectedIndex]   
-                    })
-                    
-                    inv[selector.selectedIndex] = -1
-                    selector.selectedIndex = -1
-                    selectedSlot.x = -1
-                    selectedSlot.y = -1
-                    
-                }
+        if selector.selectedIndex != -1{
+            if inv[selector.selectedIndex] != -1 && selectedSlot.page == indPage && selector.ind.x == selectedSlot.x && selector.ind.y == selectedSlot.y{
+                var _x0 = _x0+selectedSlot.x*_slotWidth+selectedSlot.x*_buffer
+                var _y0 = _y0 + selectedSlot.y*_slotHeight+selectedSlot.y*_buffer
+                
+                var _dir = selectedSlot.x >= numSlotsW-1 ? -1 : 1
+                
+                var _spr = _dir == 1 ? arrow_left : arrow_right
+                var _sW = sprite_get_width(_spr)
+                var _sH = sprite_get_height(_spr)
+                var _xx = _x0 + (_dir == 1 ? _slotWidth-_sW*.5 : -_sW*.5)
+                var _yy = _y0 + _slotHeight*.5-_sH*.5
+                draw_sprite(_spr,0,_xx,_yy)
+                
+                var _infoBoxW = _slotWidth*3
+                var _infoBoxH = _slotHeight*1.5
+                var _x1 = _xx + (_dir == 1 ? _sW*.6 :-_infoBoxW+_sW*.6)
+                var _y1 = _yy - _sH*.25 - _indiceHeight*.5
+                DrawBox("w",_x1,_y1,_infoBoxW,_infoBoxH,scl)
+                
+                var _marg = 3*scl
+                var _title = inv[selector.selectedIndex].name
+                var _desc = inv[selector.selectedIndex].desc
+                draw_set_color(textSelectedColor)
+                draw_set_align(1,1)
+                draw_text(_x1+_infoBoxW*.5,_y1+_marg,_title)
+                draw_reset_align()
+                draw_set_color(textDescColor)
+                draw_set_font(fDesc)
+                draw_text(_x1+_marg,_y1+_marg+string_height(_title),_desc)
+                draw_set_font(fInventory)
+                draw_set_color(-1)
             }
         }
-    }else{
-        if keyboard_check_released(ord("Q")){
-            if selector.selectedIndex != -1{
-                if inv[selector.selectedIndex] != -1{
-                    if inv[selector.selectedIndex].type == ITEMS_TYPE.STAKEABLE || inv[selector.selectedIndex].type == ITEMS_TYPE.USABLE{
-                        inv[selector.selectedIndex].qtd --
-                        instance_create_layer(oPlayer.x,oPlayer.y,"Instances",oDrop,{
+        
+        #endregion
+    
+        #region dropando items
+        if keyboard_check(vk_shift){
+            if keyboard_check_released(ord("Q")){
+                if selector.selectedIndex != -1{
+                    if inv[selector.selectedIndex] != -1{
+                        instance_create_layer(oPlayer.x+30,oPlayer.y,"Instances",oDrop,{
                             item: inv[selector.selectedIndex]   
                         })
-                        if inv[selector.selectedIndex].qtd <=0 {
+                        
+                        inv[selector.selectedIndex] = -1
+                        selector.selectedIndex = -1
+                        selectedSlot.x = -1
+                        selectedSlot.y = -1
+                        
+                    }
+                }
+            }
+        }else{
+            if keyboard_check_released(ord("Q")){
+                if selector.selectedIndex != -1{
+                    if inv[selector.selectedIndex] != -1{
+                        if inv[selector.selectedIndex].type == ITEMS_TYPE.STAKEABLE || inv[selector.selectedIndex].type == ITEMS_TYPE.USABLE{
+                            var _item = variable_clone(inv[selector.selectedIndex])
+                            _item.qtd = 1
+                            instance_create_layer(oPlayer.x+30,oPlayer.y,"Instances",oDrop,{
+                                item: _item
+                            })
+                            inv[selector.selectedIndex].qtd --
+                            if inv[selector.selectedIndex].qtd <=0 {
+                                inv[selector.selectedIndex] = -1
+                                selector.selectedIndex = -1
+                                selectedSlot.x = -1
+                                selectedSlot.y = -1
+                            }
+                        }else{
+                            instance_create_layer(oPlayer.x+30,oPlayer.y,"Instances",oDrop,{
+                                item: inv[selector.selectedIndex]   
+                            })
                             inv[selector.selectedIndex] = -1
                             selector.selectedIndex = -1
                             selectedSlot.x = -1
                             selectedSlot.y = -1
                         }
-                    }else{
-                        instance_create_layer(oPlayer.x,oPlayer.y,"Instances",oDrop,{
-                            item: inv[selector.selectedIndex]   
-                        })
-                        inv[selector.selectedIndex] = -1
-                        selector.selectedIndex = -1
-                        selectedSlot.x = -1
-                        selectedSlot.y = -1
                     }
                 }
             }
         }
+       #endregion
+    
     }
-   
+    #endregion
+    
+    #endregion
+    
     
     surface_reset_target()
 }else{

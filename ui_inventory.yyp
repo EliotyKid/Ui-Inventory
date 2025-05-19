@@ -114,6 +114,7 @@
   "name":"ui_inventory",
   "resources":[
     {"id":{"name":"ac_inventory","path":"animcurves/ac_inventory/ac_inventory.yy",},},
+    {"id":{"name":"fDesc","path":"fonts/fDesc/fDesc.yy",},},
     {"id":{"name":"fInventory","path":"fonts/fInventory/fInventory.yy",},},
     {"id":{"name":"__InputUpdateController","path":"objects/__InputUpdateController/__InputUpdateController.yy",},},
     {"id":{"name":"oCam","path":"objects/oCam/oCam.yy",},},
@@ -640,6 +641,7 @@
     {"id":{"name":"rod_alt","path":"sprites/rod_alt/rod_alt.yy",},},
     {"id":{"name":"rod","path":"sprites/rod/rod.yy",},},
     {"id":{"name":"sandtimer","path":"sprites/sandtimer/sandtimer.yy",},},
+    {"id":{"name":"sDrop","path":"sprites/sDrop/sDrop.yy",},},
     {"id":{"name":"seeds_generic","path":"sprites/seeds_generic/seeds_generic.yy",},},
     {"id":{"name":"select_dots_large","path":"sprites/select_dots_large/select_dots_large.yy",},},
     {"id":{"name":"select_dots","path":"sprites/select_dots/select_dots.yy",},},
