@@ -12,7 +12,15 @@ function __InputConfigVerbs()
         ACTION,
         SPECIAL,
         PAUSE,
-        INVENTORY
+        INVENTORY,
+        SELECT,
+        NAV_RIGHT,
+        NAV_LEFT,
+        INV_NEXT_PAGE,
+        INV_PREVIOUS_PAGE,
+        DIVIDE_ITEM,
+        DROP_ITEM,
+        TO_DROP_STACK
     }
     
     enum INPUT_CLUSTER
@@ -33,7 +41,15 @@ function __InputConfigVerbs()
         InputDefineVerb(INPUT_VERB.ACTION,  "action",      vk_enter,            gp_face3);
         InputDefineVerb(INPUT_VERB.SPECIAL, "special",     vk_shift,            gp_face4);
         InputDefineVerb(INPUT_VERB.PAUSE,   "pause",       vk_escape,           gp_start);
-        InputDefineVerb(INPUT_VERB.PAUSE,   "inventory",   ord("I"),            gp_select);
+        InputDefineVerb(INPUT_VERB.INVENTORY,   "inventory",   [ord("I"), vk_escape],            gp_select);
+        InputDefineVerb(INPUT_VERB.SELECT,   "select",   [mb_left],            gp_face1);
+        InputDefineVerb(INPUT_VERB.DIVIDE_ITEM,   "divide_item",   [mb_right],            gp_face2);
+        InputDefineVerb(INPUT_VERB.NAV_LEFT,   "nav_left",   ord("K"),            gp_shoulderl);
+        InputDefineVerb(INPUT_VERB.NAV_RIGHT,   "nav_right",   ord("L"),            gp_shoulderr);
+        InputDefineVerb(INPUT_VERB.INV_NEXT_PAGE,   "inv_next_page",   ord("M"),            gp_shoulderrb);
+        InputDefineVerb(INPUT_VERB.INV_PREVIOUS_PAGE,   "inv_previous_page",   ord("N"),            gp_shoulderlb);
+        InputDefineVerb(INPUT_VERB.DROP_ITEM,   "drop_item",   ord("Q"),            gp_face3);
+        InputDefineVerb(INPUT_VERB.TO_DROP_STACK,   "to_drop_stack",   vk_shift,            gp_stickl);
     }
     else //Flip A/B over on Switch
     {

@@ -110,7 +110,7 @@ LsmAdd("run", {
 
 LsmAddFreeState({
   step: function(){
-    if keyboard_check_released(ord("I")){
+    if InputPressed(INPUT_VERB.INVENTORY){
         if !instance_exists(oInventoryManager){
             instance_create_depth(0,0,-9999,oInventoryManager)
         }

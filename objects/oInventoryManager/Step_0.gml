@@ -24,7 +24,7 @@ if !show {
 }
 
 
-if keyboard_check_released(ord("I")) show = false
+if InputPressed(INPUT_VERB.INVENTORY) show = false
 
 
 selector.pos.x = lerp(selector.pos.x, selector.pos.toX,.25)
@@ -34,10 +34,19 @@ selector.scale.y = lerp(selector.scale.y, 1,.1)
 selector.ang = lerp(selector.ang,0,.1)
 
 
-selector.ind.x += keyboard_check_pressed(vk_right)-keyboard_check_pressed(vk_left)
+selector.ind.x += InputPressed(INPUT_VERB.RIGHT)-InputPressed(INPUT_VERB.LEFT)
 selector.ind.x = clamp(selector.ind.x,0,numSlotsW-1)
 
-selector.ind.y += keyboard_check_pressed(vk_down)-keyboard_check_pressed(vk_up)
+selector.ind.y += InputPressed(INPUT_VERB.DOWN)-InputPressed(INPUT_VERB.UP)
 selector.ind.y = clamp(selector.ind.y,0,numSlotsH-1)
+
+navInd += InputPressed(INPUT_VERB.NAV_RIGHT)-InputPressed(INPUT_VERB.NAV_LEFT)
+navInd = clamp(navInd,0,array_length(navItems)-1)
+
+if navInd == 0{
+    indPage += InputPressed(INPUT_VERB.INV_NEXT_PAGE)-InputPressed(INPUT_VERB.INV_PREVIOUS_PAGE)
+    indPage = clamp(indPage,0,numInvPages-1)
+}
+
 
 

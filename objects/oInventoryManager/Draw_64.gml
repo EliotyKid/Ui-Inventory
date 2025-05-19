@@ -106,7 +106,7 @@ if surface_exists(invetorySurf){
             }
         }
         
-        
+
         draw_set_align(1,1)
         draw_set_color(i==navInd ? textSelectedColor : textUnselectedColor)
         draw_text(_x1+_indiceWidth*.5,_y1+_indiceHeight*.5-_marg,navItems[i])
@@ -139,6 +139,7 @@ if surface_exists(invetorySurf){
             var y2 = y1+_slotHeight
             //draw_rectangle(x1,y1,x2,y2,false)
             
+            
             selector.pos.toX = _x0+selector.ind.x*_slotWidth+selector.ind.x*_buffer
             selector.pos.toY = _y0 + selector.ind.y*_slotHeight+selector.ind.y*_buffer
             
@@ -146,132 +147,132 @@ if surface_exists(invetorySurf){
             var sobre = point_in_rectangle(_mxSurf,_mySurf,x1,y1,x2,y2)
             if  sobre{
                 if selector.ind.x != _xx || selector.ind.y != _yy{
-                    //selector.ang = 30*(_xx>selector.ind.x?-1:1)
-                    
+                    //selector.ang = 90*(_xx>selector.ind.x?-1:1)
                     selector.ind.x = _xx
                     selector.ind.y = _yy
                     selector.scale.x = 1.2
                     selector.scale.y = 1.2
-                }
-                
-                if mouse_check_button_pressed(mb_left){
-                    selector.scale.x = .8
-                    selector.scale.y = .8
-                    
-                    selectedSlot.x = selector.ind.x
-                    selectedSlot.y = selector.ind.y
-                    
                     selectedSlot.page = indPage
+                }
+            }
+            
+            
+            
+            if InputPressed(INPUT_VERB.SELECT){
+                
+                
+                var _resetSlot = false
+                
+                if selector.ind.x == _xx && selector.ind.y == _yy{
+                    var _clickedIndex= PosToIndiceInArray(_xx,_yy) //posição do array clicada
+                    var _selectedIndex = selector.selectedIndex //posição array ja selecionada | caso não tenha nada selecionada o valor = -1
+                    //show_message($"cliecked: {_clickedIndex} || selected: {_selectedIndex}")
+                    var _newSel = _clickedIndex
                     
-                    var _cI= PosToIndiceInArray(_xx,_yy) //posição do array clicada
-                    var _sI = selector.selectedIndex //posição array ja selecionada | caso não tenha nada selecionada o valor = -1
-                    //show_message($"cliecked: {_cI} || selected: {_sI}")
-                    var _newSel = _cI
-                    
-                    if _sI != -1{ //cheaca se a posiçao ja selecionada tem algo
-                        if inv[_sI] != -1{//checa se no array nessa posição tem algum item
+                    if _selectedIndex != -1{ //cheaca se a posiçao ja selecionada tem algo
+                        if inv[_selectedIndex] != -1{//checa se no array nessa posição tem algum item
                             
                             
-                            if inv[_cI] == -1{//checa se na posição clicada não tem nehum item item
-                                inv[_cI] = inv[_sI]
-                                inv[_sI] = -1
+                            if inv[_clickedIndex] == -1{//checa se na posição clicada não tem nehum item item
+                                inv[_clickedIndex] = inv[_selectedIndex]
+                                inv[_selectedIndex] = -1
                                 _newSel = -1
-                                selectedSlot.x = -1
-                                selectedSlot.y = -1
-                                
-                               
+                                _resetSlot = true
+                            
                                 
                             }else{//caso tenha algum item na posição clicada
-                                if inv[_sI].id != inv[_cI].id{ //se os items o selecionado é diferente do que eu cliquei
-                                    var _item = inv[_cI]
-                                    inv[_cI] = inv[_sI]
-                                    inv[_sI] = _item
+                                if inv[_selectedIndex].id != inv[_clickedIndex].id{ //se os items o selecionado é diferente do que eu cliquei
+                                    var _item = inv[_clickedIndex]
+                                    inv[_clickedIndex] = inv[_selectedIndex]
+                                    inv[_selectedIndex] = _item
                                     _newSel = -1
-                                    selectedSlot.x = -1
-                                    selectedSlot.y = -1
+                                    _resetSlot = true
                                 }else{ //se os items o selecionado for igual do que eu cliquei
-                                    if _cI != _sI{//checa se as posições clicada e selecionada forem diferentes
-                                        var total = inv[_cI].qtd + inv[_sI].qtd //pega a soma das quantidades de items de cada
-                                        if total < inv[_cI].maxQtd{//caso a soma seja menor que a quantidade maxima possivel desse item por slot
-                                            inv[_cI].qtd = total
-                                            inv[_sI] = -1
+                                    if _clickedIndex != _selectedIndex{//checa se as posições clicada e selecionada forem diferentes
+                                        var total = inv[_clickedIndex].qtd + inv[_selectedIndex].qtd //pega a soma das quantidades de items de cada
+                                        if total < inv[_clickedIndex].maxQtd{//caso a soma seja menor que a quantidade maxima possivel desse item por slot
+                                            inv[_clickedIndex].qtd = total
+                                            inv[_selectedIndex] = -1
                                             _newSel = -1
-                                            selectedSlot.x = -1
-                                            selectedSlot.y = -1
+                                            _resetSlot = true
                                         }else{//caso a soma ultrapasse a quantidade maxima
-                                            var _resto = total-inv[_cI].maxQtd
-                                            inv[_cI].qtd = 0
-                                            inv[_sI].qtd = 0
-                                            inv[_cI].qtd = inv[_cI].maxQtd
-                                            inv[_sI].qtd = _resto 
-                                            if inv[_sI].qtd <= 0 inv[_sI] = -1
+                                            var _resto = total-inv[_clickedIndex].maxQtd
+                                            inv[_clickedIndex].qtd = 0
+                                            inv[_selectedIndex].qtd = 0
+                                            inv[_clickedIndex].qtd = inv[_clickedIndex].maxQtd
+                                            inv[_selectedIndex].qtd = _resto 
+                                            if inv[_selectedIndex].qtd <= 0 inv[_selectedIndex] = -1
                                             _newSel = -1
-                                            selectedSlot.x = -1
-                                            selectedSlot.y = -1
+                                            _resetSlot = true
                                         }
                                     }else{//se for a mesma posiça deselciona 
-                                        selectedSlot.x = -1
-                                        selectedSlot.y = -1
                                         _newSel=-1
                                     }
                                 }
                             }
                         }
                     }
-                    
-                    
+                    selectedSlot.x = _resetSlot ? -1 : _xx
+                    selectedSlot.y = _resetSlot ? -1 : _yy
                     selector.selectedIndex = _newSel
                 }
-                if mouse_check_button_pressed(mb_right){
-                    selector.scale.x = .8
-                    selector.scale.y = .8
-                    selectedSlot.page = indPage
-                    
+                selectedSlot.page = indPage
+                
+            }
+            
+            if InputPressed(INPUT_VERB.DIVIDE_ITEM){
+                selector.scale.x = .8
+                selector.scale.y = .8
+                selectedSlot.page = indPage
+                
+                 if selector.ind.x == _xx && selector.ind.y == _yy{
                     var _cI= PosToIndiceInArray(_xx,_yy) //posição do array clicada
                     var _sI = selector.selectedIndex //posição array ja selecionada | caso não tenha nada selecionada o valor = -1
                     if _sI != -1{ //cheaca se a posiçao ja selecionada tem algo
                         if inv[_sI] != -1{//checa se no array nessa posição tem algum item
-                            if inv[_cI] == -1{
-                                var _item = variable_clone(inv[_sI])
-                                _item.qtd = 1
-                                inv[_cI] = _item
-                                inv[_sI].qtd --
-                                if inv[_sI].qtd<=0 {
-                                    inv[_sI] = -1
-                                    selectedSlot.x = -1
-                                    selectedSlot.y = -1
-                                    selector.selectedIndex = -1
-                                }
-                            }else{
-                                if inv[_cI].id == inv[_sI].id{
-                                    if _cI != _sI{
-                                        var _nextValue = inv[_cI].qtd + 1
-                                        if _nextValue <= inv[_cI].maxQtd {
-                                            inv[_cI].qtd ++
-                                            inv[_sI].qtd --
-                                            if inv[_sI].qtd<=0 {
-                                                inv[_sI] = -1
-                                                selectedSlot.x = -1
-                                                selectedSlot.y = -1
-                                                selector.selectedIndex = -1
-                                            }
-                                        }
-                                    }else{
+                            if inv[_sI].type == ITEMS_TYPE.STAKEABLE || inv[_sI].type == ITEMS_TYPE.USABLE{
+                                if inv[_cI] == -1{
+                                    var _item = variable_clone(inv[_sI])
+                                    _item.qtd = 1
+                                    inv[_cI] = _item
+                                    inv[_sI].qtd --
+                                    if inv[_sI].qtd<=0 {
+                                        inv[_sI] = -1
                                         selectedSlot.x = -1
                                         selectedSlot.y = -1
                                         selector.selectedIndex = -1
+                                    }
+                                }else{
+                                    if inv[_cI].id == inv[_sI].id{
+                                        if _cI != _sI{
+                                            var _nextValue = inv[_cI].qtd + 1
+                                            if _nextValue <= inv[_cI].maxQtd {
+                                                inv[_cI].qtd ++
+                                                inv[_sI].qtd --
+                                                if inv[_sI].qtd<=0 {
+                                                    inv[_sI] = -1
+                                                    selectedSlot.x = -1
+                                                    selectedSlot.y = -1
+                                                    selector.selectedIndex = -1
+                                                }
+                                            }
+                                        }else{
+                                            selectedSlot.x = -1
+                                            selectedSlot.y = -1
+                                            selector.selectedIndex = -1
+                                        }
                                     }
                                 }
                             }
                         }
                     }
-                    
                 }
+                
             }
+            
             #endregion
             
             var _isSelected = _xx == selectedSlot.x && _yy == selectedSlot.y && selectedSlot.page == indPage
-            
             DrawBox(_isSelected?"w":"dt",x1,y1,_slotWidth,_slotHeight,scl)
             
             if inv[_startIndex+i] != -1{
@@ -391,18 +392,18 @@ if surface_exists(invetorySurf){
                 var _x0 = _x0+selectedSlot.x*_slotWidth+selectedSlot.x*_buffer
                 var _y0 = _y0 + selectedSlot.y*_slotHeight+selectedSlot.y*_buffer
                 
-                var _dir = selectedSlot.x >= numSlotsW-1 ? -1 : 1
+                var _dir = selectedSlot.x >= numSlotsW-2 ? -1 : 1
                 
                 var _spr = _dir == 1 ? arrow_left : arrow_right
-                var _sW = sprite_get_width(_spr)
-                var _sH = sprite_get_height(_spr)
+                var _sW = sprite_get_width(_spr)*scl
+                var _sH = sprite_get_height(_spr)*scl
                 var _xx = _x0 + (_dir == 1 ? _slotWidth-_sW*.5 : -_sW*.5)
                 var _yy = _y0 + _slotHeight*.5-_sH*.5
-                draw_sprite(_spr,0,_xx,_yy)
+                draw_sprite_ext(_spr,0,_xx,_yy,scl,scl,0,c_white,1)
                 
                 var _infoBoxW = _slotWidth*3
                 var _infoBoxH = _slotHeight*1.5
-                var _x1 = _xx + (_dir == 1 ? _sW*.6 :-_infoBoxW+_sW*.6)
+                var _x1 = _xx + (_dir == 1 ? _sW*.5 :-_infoBoxW+_sW*.5)
                 var _y1 = _yy - _sH*.25 - _indiceHeight*.5
                 DrawBox("w",_x1,_y1,_infoBoxW,_infoBoxH,scl)
                 
@@ -411,7 +412,7 @@ if surface_exists(invetorySurf){
                 var _desc = inv[selector.selectedIndex].desc
                 draw_set_color(textSelectedColor)
                 draw_set_align(1,1)
-                draw_text(_x1+_infoBoxW*.5,_y1+_marg,_title)
+                draw_text(_x1+_infoBoxW*.5,_y1+_marg*2,_title)
                 draw_reset_align()
                 draw_set_color(textDescColor)
                 draw_set_font(fDesc)
@@ -424,8 +425,8 @@ if surface_exists(invetorySurf){
         #endregion
     
         #region dropando items
-        if keyboard_check(vk_shift){
-            if keyboard_check_released(ord("Q")){
+        if InputCheck(INPUT_VERB.TO_DROP_STACK){
+            if InputPressed(INPUT_VERB.DROP_ITEM){
                 if selector.selectedIndex != -1{
                     if inv[selector.selectedIndex] != -1{
                         instance_create_layer(oPlayer.x+30,oPlayer.y,"Instances",oDrop,{
@@ -441,7 +442,7 @@ if surface_exists(invetorySurf){
                 }
             }
         }else{
-            if keyboard_check_released(ord("Q")){
+            if InputPressed(INPUT_VERB.DROP_ITEM){
                 if selector.selectedIndex != -1{
                     if inv[selector.selectedIndex] != -1{
                         if inv[selector.selectedIndex].type == ITEMS_TYPE.STAKEABLE || inv[selector.selectedIndex].type == ITEMS_TYPE.USABLE{
