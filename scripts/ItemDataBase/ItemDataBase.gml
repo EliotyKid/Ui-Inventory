@@ -1,5 +1,5 @@
 ITEM_DATABASE.Add(new ItemUsable("Carrot",carrot_05,"uma comida",function()  {
-  show_debug_message("Eating the carrot")
+  show_message_async("Eating the carrot")
 },true,10))
 ITEM_DATABASE.Add(new ItemStakeable("Cauliflower",cauliflower_05,"uma flor",false))
 ITEM_DATABASE.Add(new ItemDurability("Milk",milk,"vem da vaca",false))
