@@ -20,7 +20,8 @@ function __InputConfigVerbs()
         INV_PREVIOUS_PAGE,
         DIVIDE_ITEM,
         DROP_ITEM,
-        TO_DROP_STACK
+        TO_DROP_STACK,
+        USING_ITEM
     }
     
     enum INPUT_CLUSTER
@@ -50,6 +51,7 @@ function __InputConfigVerbs()
         InputDefineVerb(INPUT_VERB.INV_PREVIOUS_PAGE,   "inv_previous_page",   ord("N"),            gp_shoulderlb);
         InputDefineVerb(INPUT_VERB.DROP_ITEM,   "drop_item",   ord("Q"),            gp_face3);
         InputDefineVerb(INPUT_VERB.TO_DROP_STACK,   "to_drop_stack",   vk_shift,            gp_stickl);
+        InputDefineVerb(INPUT_VERB.USING_ITEM,   "using_item",   vk_space,            gp_face4);
     }
     else //Flip A/B over on Switch
     {

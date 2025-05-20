@@ -10,7 +10,7 @@ enum ITEMS_TYPE{
 
 
 global.pause = false
-
+global.isGamepad = false
 
 global.playerInventory = array_create(24,-1)
 global.playerInventory[0]=(ITEM_DATABASE.FindById(0).item)

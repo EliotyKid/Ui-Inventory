@@ -51,3 +51,9 @@ if  (navInd == 0)  {
   indPage += InputPressed(INPUT_VERB.INV_NEXT_PAGE)-InputPressed(INPUT_VERB.INV_PREVIOUS_PAGE)
   indPage = clamp(indPage,0,numInvPages-1)
 }
+
+
+
+
+
+

@@ -127,6 +127,10 @@ if  (surface_exists(invetorySurf))  {
     draw_set_color(-1)
     draw_reset_align()
   }
+  
+  if global.isGamepad{
+    draw_sprite(button_lb,0,_x1,_y1)
+  }
   #endregion
   
   //==================== Page 0: Inventory Slots ====================//
@@ -175,7 +179,6 @@ if  (surface_exists(invetorySurf))  {
       //== Click logic for selecting, moving, merging or swapping items
       if  (InputPressed(INPUT_VERB.SELECT))  {
         var _resetSlot = false
-          
         if  (selector.ind.x == _xx && selector.ind.y == _yy)  {
           var _clickedIndex= PosToIndiceInArray(_xx,_yy) 
           var _selectedIndex = selector.selectedIndex 
@@ -230,24 +233,24 @@ if  (surface_exists(invetorySurf))  {
           //set the position of the selected slot
           selectedSlot.x = _resetSlot ? -1 : _xx
           selectedSlot.y = _resetSlot ? -1 : _yy
-          selectedSlot.page = indPage
           //set de new selected index
           selector.selectedIndex = _newSel
         }
         //set the page of slot selected
-        
+        selectedSlot.page = indPage
       }
         
+      
       if  (InputPressed(INPUT_VERB.DIVIDE_ITEM))  {
         selector.scale.x = .8
         selector.scale.y = .8
         selectedSlot.page = indPage
           
         if  (selector.ind.x == _xx && selector.ind.y == _yy)  {
-          var _cI= PosToIndiceInArray(_xx,_yy) //posição do array clicada
-          var _sI = selector.selectedIndex //posição array ja selecionada | caso não tenha nada selecionada o valor = -1
-          if  (_sI != -1)  { //cheaca se a posiçao ja selecionada tem algo
-            if  (inv[_sI] != -1)  {//checa se no array nessa posição tem algum item
+          var _cI= PosToIndiceInArray(_xx,_yy) 
+          var _sI = selector.selectedIndex 
+          if  (_sI != -1)  { 
+            if  (inv[_sI] != -1)  {
               if  (inv[_sI].type == ITEMS_TYPE.STAKEABLE || inv[_sI].type == ITEMS_TYPE.USABLE)  {
                 if  (inv[_cI] == -1)  {
                   var _item = variable_clone(inv[_sI])
@@ -339,12 +342,12 @@ if  (surface_exists(invetorySurf))  {
     
     #endregion
     
-    #region desenhando o seletor
+    #region Draw selector box
     DrawSelectBox(selector.pos.x,selector.pos.y,_slotWidth,_slotHeight,selector.ang,selector.scale.x,selector.scale.y,inventoryScale)
     #endregion
     
-    #region //usando item selecionado
-    if  (keyboard_check_pressed(vk_space))  {
+    #region //Using item
+    if  (InputPressed(INPUT_VERB.USING_ITEM))  {
       if  (selector.selectedIndex != -1)  {
         if  (inv[selector.selectedIndex] != -1)  {
           if  (inv[selector.selectedIndex].type == ITEMS_TYPE.USABLE)  {
@@ -364,13 +367,14 @@ if  (surface_exists(invetorySurf))  {
     
     #region Button Change Page
     if  (indPage > 0)  {
-      var _sW = sprite_get_width(arrow_left)*inventoryScale
-      var _sH = sprite_get_height(arrow_left)*inventoryScale
+      var _spr = global.isGamepad ? button_lt : arrow_left
+      var _sW = sprite_get_width(_spr)*inventoryScale
+      var _sH = sprite_get_height(_spr)*inventoryScale
       var _x1 = _contentX-_sW*.5
       var _y1 = _contentHeight*.5+_sH*.5
       var _x2 = _x1+_sW
       var _y2 = _y1+_sH
-      draw_sprite_ext(arrow_left,0,_x1,_y1,inventoryScale,inventoryScale,0,c_white,1)
+      draw_sprite_ext(_spr,0,_x1,_y1,inventoryScale,inventoryScale,0,c_white,1)
       var _hover = point_in_rectangle(_mxSurf,_mySurf,_x1,_y1,_x2,_y2)
       if  (_hover)  {
         if  (mouse_check_button_pressed(mb_left))  {
@@ -382,13 +386,14 @@ if  (surface_exists(invetorySurf))  {
     }
     
     if  (indPage < numInvPages-1)  {
-      var _sW = sprite_get_width(arrow_right)*inventoryScale
-      var _sH = sprite_get_height(arrow_right)*inventoryScale
-      var _x1 = _contentX+_contentWidth-_sW*.5
+      var _spr = global.isGamepad ? button_rt : arrow_right
+      var _sW = sprite_get_width(_spr)*inventoryScale
+      var _sH = sprite_get_height(_spr)*inventoryScale
+      var _x1 = _contentX+_contentWidth-_sW*.5-7
       var _y1 = _contentHeight*.5+_sH*.5
       var _x2 = _x1+_sW
       var _y2 = _y1+_sH
-      draw_sprite_ext(arrow_right,0,_x1,_y1,inventoryScale,inventoryScale,0,c_white,1)
+      draw_sprite_ext(_spr,0,_x1,_y1,inventoryScale,inventoryScale,0,c_white,1)
       var _hover = point_in_rectangle(_mxSurf,_mySurf,_x1,_y1,_x2,_y2)
       if  (_hover)  {
         if  (mouse_check_button_pressed(mb_left))  {

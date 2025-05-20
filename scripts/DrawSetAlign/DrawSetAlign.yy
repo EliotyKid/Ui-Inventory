@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"scr_local_state_machine_sys",
+  "%Name":"DrawSetAlign",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"scr_local_state_machine_sys",
+  "name":"DrawSetAlign",
   "parent":{
     "name":"Scripts",
     "path":"folders/Scripts.yy",
