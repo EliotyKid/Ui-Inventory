@@ -1,18 +1,28 @@
+// Getting the mouse position in the GUI layer
 var _mx = device_mouse_x_to_gui(0)
 var _my = device_mouse_y_to_gui(0)
 
+// Converting GUI mouse position to surface-local coordinates
 var _mxSurf = _mx-(invetorySurfProps.pos.x-invetorySurfProps.w*.5)
 var _mySurf = _my-(invetorySurfProps.pos.y-invetorySurfProps.h*.5)
 
+
+// Setting the font used for drawing inventory text
 draw_set_font(fInventory)
 
+//if the inventory surface exists
 if  (surface_exists(invetorySurf))  {
+  // Set the surface as the target for drawing
   surface_set_target(invetorySurf)
+  // Clear the surface with transparent black
   draw_clear_alpha(c_black,0)
+  
+  // Padding between each container box
   var _buffeBoxes = invetorySurfProps.w*.02
   
+   //==================== First Container (Left Panel) ====================//
   #region first div
-  //Infos?
+  //dimension of the first div
   var _containerWidth = invetorySurfProps.w*.3 - _buffeBoxes*2
   var _containerHeight = invetorySurfProps.h - _buffeBoxes*2
   
@@ -22,12 +32,13 @@ if  (surface_exists(invetorySurf))  {
   var _xx = _buffeBoxes
   var _yy = _buffeBoxes
   
+  //== First Content (Title box with animation)
   #region first content
   var _xEnd = _xx
   var _xStart = containerInfX[0]
   var _dist = _xStart - _xEnd
   var _infX = _xStart - _dist * containerInfVal[0]
-  DrawBox("lt",_infX,_yy,_width,_height*.15,scl)
+  DrawBox("lt",_infX,_yy,_width,_height*.15,inventoryScale)
 
   var _title = "Inventory"
   
@@ -37,48 +48,52 @@ if  (surface_exists(invetorySurf))  {
   draw_reset_align()
   #endregion
   
+  //== Second Content (Main vertical box)
   #region second content
   _yy += _height*.15+_buffeBoxes
   _xEnd = _xx
   _xStart = containerInfX[1]
   _dist = _xStart - _xEnd
   _infX = _xStart - _dist * containerInfVal[1]
-  DrawBox("w",_infX,_yy,_width,_height*.60,scl)
+  DrawBox("w",_infX,_yy,_width,_height*.60,inventoryScale)
   #endregion
   
+  //== Third Content (Bottom box)
   #region third content
-
   _yy += _buffeBoxes + _height*.60 
   _xEnd = _xx
   _xStart = containerInfX[2]
   _dist = _xStart - _xEnd
   _infX = _xStart - _dist * containerInfVal[2]
-  DrawBox("lt",_infX,_yy,_width,_height*.25,scl)
+  DrawBox("lt",_infX,_yy,_width,_height*.25,inventoryScale)
   #endregion
   
   #endregion
   
+  //==================== Second Container (Right Panel) ====================//
   #region second div
-  //Second Peace
+  // Dimensions of the second container
   _containerWidth = invetorySurfProps.w*.7 -  _buffeBoxes
   _containerHeight = invetorySurfProps.h - _buffeBoxes*2
   
+  //== Background of the container
   #region bg
   var _containerXStart = invetorySurfProps.w*.5 - _containerWidth*.5
   var _containerXEnd = invetorySurfProps.w - _containerWidth-_buffeBoxes
   var _dist = _containerXStart - _containerXEnd
   var _containerX = _containerXStart- _dist * invA
   var _containerY = _buffeBoxes
-  DrawBox("dt",_containerX,_containerY,_containerWidth,_containerHeight,scl)
+  DrawBox("dt",_containerX,_containerY,_containerWidth,_containerHeight,inventoryScale)
   #endregion
   
-  #region desenhando a navbar e o fundo das paginas
-  var _marg = 2*scl
+  //== Drawing navbar and content background
+  #region Drawing navbar
+  var _marg = 2*inventoryScale
   var _indiceWidth = (_containerWidth-_marg*2)/array_length(navItems)
   var _indiceHeight = _containerHeight*.15
   var _indiceX = _containerX+_marg + navInd*_indiceWidth
   var _indiceY = _containerY+_marg
-  navIndX = Approach(navIndX,_indiceX,8*scl)
+  navIndX = Approach(navIndX,_indiceX,8*inventoryScale)
   navIndX = clamp(navIndX,_containerX+_marg,_containerX+_marg + (array_length(navItems)-1)*_indiceWidth)
 
   
@@ -86,21 +101,20 @@ if  (surface_exists(invetorySurf))  {
   var _contentY = _containerY+_marg+ _indiceHeight*.7
   var _contentWidth = _containerWidth-_marg*2
   var _contentHeight = _containerHeight-_indiceHeight
-  DrawBox("lt",_contentX,_contentY,_contentWidth,_contentHeight,scl)
+  DrawBox("lt",_contentX,_contentY,_contentWidth,_contentHeight,inventoryScale)
   
   
-  DrawBox("lt",navIndX,_indiceY,_indiceWidth,_indiceHeight+2,scl,,,false)
+  DrawBox("lt",navIndX,_indiceY,_indiceWidth,_indiceHeight+2,inventoryScale,,,false)
   
-  
+  //== Drawing navbar buttons and handling clicks
   for  (var i=0; i<array_length(navItems); i++)  {
     var _x1 = _containerX+_marg + i * _indiceWidth
     var _y1 = _indiceY
     var _x2 = _x1+_indiceWidth
     var _y2 = _y1+_indiceHeight
     
-    //draw_rectangle(_x1,_y1,_x2,_y2,false)
-    var _sobre = point_in_rectangle(_mxSurf,_mySurf,_x1,_y1,_x2,_y2)
-    if  (_sobre)  {
+    var _hover = point_in_rectangle(_mxSurf,_mySurf,_x1,_y1,_x2,_y2)
+    if  (_hover)  {
       if  (mouse_check_button_released(mb_left))  {
         navInd = i
       }
@@ -115,16 +129,17 @@ if  (surface_exists(invetorySurf))  {
   }
   #endregion
   
-  #region desenhando o a primeira pagina da navbar | inventario de items
+  //==================== Page 0: Inventory Slots ====================//
+  #region Drawing first nav bar page
   if  (navInd == 0)  {
-    #region slots inventario
+    #region inventory slots
     var _xx = 0
     var _yy = 0
     var _startIndex = indPage * slotsPerPage
     var _remaining = array_length(inv) - _startIndex
     var _slotsThisPage = min(slotsPerPage,_remaining)
-    var _buffer = 5*scl
-    _marg = 8*scl
+    var _buffer = 5*inventoryScale
+    _marg = 8*inventoryScale
     var _slotWidth = (_contentWidth - (_buffer*numSlotsW-1)-(_marg*2))/numSlotsW
     var _slotHeight = (_contentHeight*.7 - (_buffer*numSlotsH-1-(_marg*2)))/numSlotsH
     var _invW = _slotWidth*numSlotsW+_buffer*numSlotsW-1+_marg
@@ -132,20 +147,21 @@ if  (surface_exists(invetorySurf))  {
     var _x0 = _contentX+ _contentWidth-_invW
     var _y0 =_contentY+_contentHeight-_invH
     
+    // Loop through each slot on the current page
     for  (var i=0; i<_slotsThisPage; i++)  {
       var x1 = _x0+_xx*_slotWidth+_xx*_buffer
       var y1 = _y0 + _yy*_slotHeight+_yy*_buffer
       var x2 = x1+_slotWidth
       var y2 = y1+_slotHeight
-      //draw_rectangle(x1,y1,x2,y2,false)
       
-      
+      // Update the position where the selector should move to
       selector.pos.toX = _x0+selector.ind.x*_slotWidth+selector.ind.x*_buffer
       selector.pos.toY = _y0 + selector.ind.y*_slotHeight+selector.ind.y*_buffer
       
-      #region logica e movimentação sobre o slot
-      var sobre = point_in_rectangle(_mxSurf,_mySurf,x1,y1,x2,y2)
-      if  (sobre)  {
+      //== Hover and selection logic
+      #region Hover and selection logic
+      var _hover = point_in_rectangle(_mxSurf,_mySurf,x1,y1,x2,y2)
+      if  (_hover)  {
         if  (selector.ind.x != _xx || selector.ind.y != _yy)  {
           //selector.ang = 90*(_xx>selector.ind.x?-1:1)
           selector.ind.x = _xx
@@ -156,38 +172,43 @@ if  (surface_exists(invetorySurf))  {
         }
       }
       
+      //== Click logic for selecting, moving, merging or swapping items
       if  (InputPressed(INPUT_VERB.SELECT))  {
         var _resetSlot = false
           
         if  (selector.ind.x == _xx && selector.ind.y == _yy)  {
-          var _clickedIndex= PosToIndiceInArray(_xx,_yy) //posição do array clicada
-          var _selectedIndex = selector.selectedIndex //posição array ja selecionada | caso não tenha nada selecionada o valor = -1
-          //show_message($"cliecked: {_clickedIndex} || selected: {_selectedIndex}")
+          var _clickedIndex= PosToIndiceInArray(_xx,_yy) 
+          var _selectedIndex = selector.selectedIndex 
           var _newSel = _clickedIndex
           
-          if  (_selectedIndex != -1)  { //cheaca se a posiçao ja selecionada tem algo
-            if  (inv[_selectedIndex] != -1)  {//checa se no array nessa posição tem algum item
-              if  (inv[_clickedIndex] == -1)  {//checa se na posição clicada não tem nehum item item
+          if  (_selectedIndex != -1)  { 
+            if  (inv[_selectedIndex] != -1)  {
+              if  (inv[_clickedIndex] == -1)  {
+                // Move item to empty slot
                 inv[_clickedIndex] = inv[_selectedIndex]
                 inv[_selectedIndex] = -1
                 _newSel = -1
                 _resetSlot = true
-              }  else  {//caso tenha algum item na posição clicada
-                if  (inv[_selectedIndex].id != inv[_clickedIndex].id)  { //se os items o selecionado é diferente do que eu cliquei
-                    var _item = inv[_clickedIndex]
-                    inv[_clickedIndex] = inv[_selectedIndex]
-                    inv[_selectedIndex] = _item
-                    _newSel = -1
-                    _resetSlot = true
-                }  else  { //se os items o selecionado for igual do que eu cliquei
-                  if  (_clickedIndex != _selectedIndex)  {//checa se as posições clicada e selecionada forem diferentes
-                    var total = inv[_clickedIndex].qtd + inv[_selectedIndex].qtd //pega a soma das quantidades de items de cada
-                    if  (total < inv[_clickedIndex].maxQtd)  {//caso a soma seja menor que a quantidade maxima possivel desse item por slot
+              }  else  {
+                if  (inv[_selectedIndex].id != inv[_clickedIndex].id)  { 
+                  // Swap different items
+                  var _item = inv[_clickedIndex]
+                  inv[_clickedIndex] = inv[_selectedIndex]
+                  inv[_selectedIndex] = _item
+                  _newSel = -1
+                  _resetSlot = true
+                }  else  { 
+                  // Merge same items
+                  if  (_clickedIndex != _selectedIndex)  {
+                    var total = inv[_clickedIndex].qtd + inv[_selectedIndex].qtd 
+                    if  (total < inv[_clickedIndex].maxQtd)  {
+                      // Merge all into one slot
                       inv[_clickedIndex].qtd = total
                       inv[_selectedIndex] = -1
                       _newSel = -1
                       _resetSlot = true
-                    }  else  {//caso a soma ultrapasse a quantidade maxima
+                    }  else  {
+                      // Fill up one slot and leave the rest
                       var _resto = total-inv[_clickedIndex].maxQtd
                       inv[_clickedIndex].qtd = 0
                       inv[_selectedIndex].qtd = 0
@@ -197,7 +218,8 @@ if  (surface_exists(invetorySurf))  {
                       _newSel = -1
                       _resetSlot = true
                     }
-                  }  else  {//se for a mesma posiça deselciona 
+                  }  else  {
+                    // Same slot clicked again → deselect
                     _newSel=-1
                     _resetSlot = true
                   }
@@ -205,11 +227,15 @@ if  (surface_exists(invetorySurf))  {
               }
             }
           }
+          //set the position of the selected slot
           selectedSlot.x = _resetSlot ? -1 : _xx
           selectedSlot.y = _resetSlot ? -1 : _yy
+          selectedSlot.page = indPage
+          //set de new selected index
           selector.selectedIndex = _newSel
         }
-        selectedSlot.page = indPage
+        //set the page of slot selected
+        
       }
         
       if  (InputPressed(INPUT_VERB.DIVIDE_ITEM))  {
@@ -264,22 +290,22 @@ if  (surface_exists(invetorySurf))  {
       #endregion
       
       var _isSelected = _xx == selectedSlot.x && _yy == selectedSlot.y && selectedSlot.page == indPage
-      DrawBox(_isSelected?"w":"dt",x1,y1,_slotWidth,_slotHeight,scl)
+      DrawBox(_isSelected?"w":"dt",x1,y1,_slotWidth,_slotHeight,inventoryScale)
         
       if  (inv[_startIndex+i] != -1)  {
         var _item = inv[_startIndex+i]
         var _spr = _item.spriteIndex
-        var _sprW = sprite_get_width(_spr)*scl
-        var _sprH = sprite_get_height(_spr)*scl
+        var _sprW = sprite_get_width(_spr)*inventoryScale
+        var _sprH = sprite_get_height(_spr)*inventoryScale
         var _slotCx = x1+_slotWidth*.5
         var _slotCy = y1+_slotHeight*.5
         var drawX = _slotCx-_sprW*.5
         var drawY = _slotCy-_sprH*.5
         
-        var _textX = x1 + 3*scl
-        var _textY = y1 + 3*scl
+        var _textX = x1 + 3*inventoryScale
+        var _textY = y1 + 3*inventoryScale
         
-        draw_sprite_ext(_spr,0,drawX,drawY,scl,scl,0,c_white,1)
+        draw_sprite_ext(_spr,0,drawX,drawY,inventoryScale,inventoryScale,0,c_white,1)
         
         
         switch _item.type{
@@ -314,7 +340,7 @@ if  (surface_exists(invetorySurf))  {
     #endregion
     
     #region desenhando o seletor
-    DrawSelectBox(selector.pos.x,selector.pos.y,_slotWidth,_slotHeight,selector.ang,selector.scale.x,selector.scale.y,scl)
+    DrawSelectBox(selector.pos.x,selector.pos.y,_slotWidth,_slotHeight,selector.ang,selector.scale.x,selector.scale.y,inventoryScale)
     #endregion
     
     #region //usando item selecionado
@@ -338,15 +364,15 @@ if  (surface_exists(invetorySurf))  {
     
     #region Button Change Page
     if  (indPage > 0)  {
-      var _sW = sprite_get_width(arrow_left)*scl
-      var _sH = sprite_get_height(arrow_left)*scl
+      var _sW = sprite_get_width(arrow_left)*inventoryScale
+      var _sH = sprite_get_height(arrow_left)*inventoryScale
       var _x1 = _contentX-_sW*.5
       var _y1 = _contentHeight*.5+_sH*.5
       var _x2 = _x1+_sW
       var _y2 = _y1+_sH
-      draw_sprite_ext(arrow_left,0,_x1,_y1,scl,scl,0,c_white,1)
-      var _sobre = point_in_rectangle(_mxSurf,_mySurf,_x1,_y1,_x2,_y2)
-      if  (_sobre)  {
+      draw_sprite_ext(arrow_left,0,_x1,_y1,inventoryScale,inventoryScale,0,c_white,1)
+      var _hover = point_in_rectangle(_mxSurf,_mySurf,_x1,_y1,_x2,_y2)
+      if  (_hover)  {
         if  (mouse_check_button_pressed(mb_left))  {
           indPage--
           selector.ind.x = numSlotsW-2
@@ -356,15 +382,15 @@ if  (surface_exists(invetorySurf))  {
     }
     
     if  (indPage < numInvPages-1)  {
-      var _sW = sprite_get_width(arrow_right)*scl
-      var _sH = sprite_get_height(arrow_right)*scl
+      var _sW = sprite_get_width(arrow_right)*inventoryScale
+      var _sH = sprite_get_height(arrow_right)*inventoryScale
       var _x1 = _contentX+_contentWidth-_sW*.5
       var _y1 = _contentHeight*.5+_sH*.5
       var _x2 = _x1+_sW
       var _y2 = _y1+_sH
-      draw_sprite_ext(arrow_right,0,_x1,_y1,scl,scl,0,c_white,1)
-      var _sobre = point_in_rectangle(_mxSurf,_mySurf,_x1,_y1,_x2,_y2)
-      if  (_sobre)  {
+      draw_sprite_ext(arrow_right,0,_x1,_y1,inventoryScale,inventoryScale,0,c_white,1)
+      var _hover = point_in_rectangle(_mxSurf,_mySurf,_x1,_y1,_x2,_y2)
+      if  (_hover)  {
         if  (mouse_check_button_pressed(mb_left))  {
           indPage++
           selector.ind.x = 0
@@ -386,19 +412,19 @@ if  (surface_exists(invetorySurf))  {
         var _dir = selectedSlot.x >= numSlotsW-2 ? -1 : 1
         
         var _spr = _dir == 1 ? arrow_left : arrow_right
-        var _sW = sprite_get_width(_spr)*scl
-        var _sH = sprite_get_height(_spr)*scl
+        var _sW = sprite_get_width(_spr)*inventoryScale
+        var _sH = sprite_get_height(_spr)*inventoryScale
         var _xx = _x0 + (_dir == 1 ? _slotWidth-_sW*.5 : -_sW*.5)
         var _yy = _y0 + _slotHeight*.5-_sH*.5
-        draw_sprite_ext(_spr,0,_xx,_yy,scl,scl,0,c_white,1)
+        draw_sprite_ext(_spr,0,_xx,_yy,inventoryScale,inventoryScale,0,c_white,1)
         
         var _infoBoxW = _slotWidth*3
         var _infoBoxH = _slotHeight*1.5
         var _x1 = _xx + (_dir == 1 ? _sW*.5 :-_infoBoxW+_sW*.5)
         var _y1 = _yy - _sH*.25 - _indiceHeight*.5
-        DrawBox("w",_x1,_y1,_infoBoxW,_infoBoxH,scl)
+        DrawBox("w",_x1,_y1,_infoBoxW,_infoBoxH,inventoryScale)
         
-        var _marg = 3*scl
+        var _marg = 3*inventoryScale
         var _title = inv[selector.selectedIndex].name
         var _desc = inv[selector.selectedIndex].desc
         draw_set_color(textSelectedColor)
