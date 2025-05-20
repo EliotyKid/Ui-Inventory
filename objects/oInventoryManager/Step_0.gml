@@ -1,10 +1,10 @@
 
 
-if startInfoAnim{
-    invA = containerCurve.getValue()
-    containerInfVal[0] = containerInfCurve[0].getValue()
-    containerInfVal[1] = containerInfCurve[1].getValue()
-    containerInfVal[2] = containerInfCurve[2].getValue()
+if  (startInfoAnim)  {
+  invA = containerCurve.getValue()
+  containerInfVal[0] = containerInfCurve[0].getValue()
+  containerInfVal[1] = containerInfCurve[1].getValue()
+  containerInfVal[2] = containerInfCurve[2].getValue()
 }
 
 valScale = show?scaleCurve.getValue():scaleExitCurve.getValue()
@@ -18,13 +18,13 @@ invetorySurfProps.scale.y = valScale
 
 invetorySurfProps.angle.z = 20*valAngle
 
-if !show {
-    if invetorySurfProps.scale.x < .1 instance_destroy()
-    global.pause = false
+if  (!show) {
+  if invetorySurfProps.scale.x < .1 instance_destroy()
+  global.pause = false
 }
 
 
-if InputPressed(INPUT_VERB.INVENTORY) show = false
+if  (InputPressed(INPUT_VERB.INVENTORY)) show = false
 
 
 selector.pos.x = lerp(selector.pos.x, selector.pos.toX,.25)
@@ -43,9 +43,9 @@ selector.ind.y = clamp(selector.ind.y,0,numSlotsH-1)
 navInd += InputPressed(INPUT_VERB.NAV_RIGHT)-InputPressed(INPUT_VERB.NAV_LEFT)
 navInd = clamp(navInd,0,array_length(navItems)-1)
 
-if navInd == 0{
-    indPage += InputPressed(INPUT_VERB.INV_NEXT_PAGE)-InputPressed(INPUT_VERB.INV_PREVIOUS_PAGE)
-    indPage = clamp(indPage,0,numInvPages-1)
+if  (navInd == 0)  {
+  indPage += InputPressed(INPUT_VERB.INV_NEXT_PAGE)-InputPressed(INPUT_VERB.INV_PREVIOUS_PAGE)
+  indPage = clamp(indPage,0,numInvPages-1)
 }
 
 

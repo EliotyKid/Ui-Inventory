@@ -1,4 +1,4 @@
-if !instance_exists(target) exit
+if  (!instance_exists(target))  exit
 
 var _camToX = target.x - camW * .5
 var _camToY = target.y - camH * .6

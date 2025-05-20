@@ -2,17 +2,14 @@
 #macro GUI_H 540
 
 enum ITEMS_TYPE{
-    BASE,
-    DURABILITY,
-    STAKEABLE,
-    USABLE
+  BASE,
+  DURABILITY,
+  STAKEABLE,
+  USABLE
 }
 
 
 global.pause = false
-
-
-//global.playerInventory = new Inventory(24)
 
 
 global.playerInventory = array_create(24,-1)

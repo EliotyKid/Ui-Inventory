@@ -1,1 +1,1 @@
-if surface_exists(invetorySurf) surface_free(invetorySurf)
+if  (surface_exists(invetorySurf))  surface_free(invetorySurf)

@@ -2,30 +2,28 @@ global.pause = true
 show = true
 scl = ceil(GUI_W/240)
 
-
-
 invetorySurf = -1
 invetorySurfProps = {
-    w: GUI_W*.9,
-    h: GUI_H*.8,
-    
-    scale: {
-        x: 0,
-        y: 0,
-        z: 1
-    },
-    
-    pos: {
-        x: 0,
-        y: 0,
-        z: 0
-    },
-    
-    angle: {
-        x: 0,
-        y: 0,
-        z: 0
-    } 
+  w: GUI_W*.9,
+  h: GUI_H*.8,
+  
+  scale: {
+    x: 0,
+    y: 0,
+    z: 1
+  },
+  
+  pos: {
+    x: 0,
+    y: 0,
+    z: 0
+  },
+  
+  angle: {
+    x: 0,
+    y: 0,
+    z: 0
+  } 
 }
 
 invetorySurfProps.pos.x = GUI_W*.5
@@ -47,20 +45,20 @@ startInfoAnim = false
 containerInvX = invetorySurfProps.w*.5
 
 containerInfX = [
-    invetorySurfProps.w*.5,
-    invetorySurfProps.w*.5,
-    invetorySurfProps.w*.5
+  invetorySurfProps.w*.5,
+  invetorySurfProps.w*.5,
+  invetorySurfProps.w*.5
 ]
 
 containerInfVal = [
-    0,
-    0,
-    0
+  0,
+  0,
+  0
 ]
 containerInfCurve = [
-    new CurveRunner(ac_inventory,"containerInfItem",.8),
-    new CurveRunner(ac_inventory,"containerInfItem",1.2),
-    new CurveRunner(ac_inventory,"containerInfItem",1.6)
+  new CurveRunner(ac_inventory,"containerInfItem",.8),
+  new CurveRunner(ac_inventory,"containerInfItem",1.2),
+  new CurveRunner(ac_inventory,"containerInfItem",1.6)
 ]
 
 
@@ -88,44 +86,44 @@ indPage = 0
 
 //show_message(ITEM_DATABASE.List())
 selectedSlot = {
-    x: -1,
-    y: -1,
-    page: -1
+  x: -1,
+  y: -1,
+  page: -1
 }
 
 selector = {
-    pos: {
-        x: GUI_W*.5,
-        y: GUI_H*1.5,
-        toX: GUI_W*.5,
-        toY: GUI_H*1.5
-    },
-    ang: 0,
-    ind: {
-        x: 0,
-        y: 0
-    },
-    scale: {
-        x: 1,
-        y: 1
-    },
-    selectedIndex: -1,
+  pos: {
+    x: GUI_W*.5,
+    y: GUI_H*1.5,
+    toX: GUI_W*.5,
+    toY: GUI_H*1.5
+  },
+  ang: 0,
+  ind: {
+    x: 0,
+    y: 0
+  },
+  scale: {
+    x: 1,
+    y: 1
+  },
+  selectedIndex: -1,
 }
 
-PosToIndiceInArray = function(_xx,_yy){
+PosToIndiceInArray = function(_xx,_yy)  {
     var _startIndex = indPage * slotsPerPage
     var _indice= _startIndex + _yy * numSlotsW + _xx
     return _indice
 }
 
-IndiceArrayToPos = function(_indice){
-    var _localIndex = _indice - (indPage*slotsPerPage)
-    if _localIndex<0 ||_localIndex>=slotsPerPage return undefined
-        
-    var _xx = _localIndex mod numSlotsW
-    var _yy = floor(_localIndex/numSlotsW)
-    return {
-        x: _xx,
-        y: _yy
-    }
+IndiceArrayToPos = function(_indice)  {
+  var _localIndex = _indice - (indPage*slotsPerPage)
+  if _localIndex<0 ||_localIndex>=slotsPerPage return undefined
+    
+  var _xx = _localIndex mod numSlotsW
+  var _yy = floor(_localIndex/numSlotsW)
+  return {
+    x: _xx,
+    y: _yy
+  }
 }

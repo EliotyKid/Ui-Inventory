@@ -7,7 +7,7 @@ spd = .1
 
 camera_set_view_size(view,camW,camH)
 
-if !instance_exists(target) exit
+if  (!instance_exists(target))  exit
     
 camX = target.x - camW * .5
 camY = target.y - camH * .6

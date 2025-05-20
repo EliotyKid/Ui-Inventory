@@ -266,7 +266,6 @@
     {"id":{"name":"__scribble_tick","path":"scripts/__scribble_tick/__scribble_tick.yy",},},
     {"id":{"name":"Approach","path":"scripts/Approach/Approach.yy",},},
     {"id":{"name":"CreateDataBase","path":"scripts/CreateDataBase/CreateDataBase.yy",},},
-    {"id":{"name":"CreateInventory","path":"scripts/CreateInventory/CreateInventory.yy",},},
     {"id":{"name":"CurveGetValue","path":"scripts/CurveGetValue/CurveGetValue.yy",},},
     {"id":{"name":"draw_set_align","path":"scripts/draw_set_align/draw_set_align.yy",},},
     {"id":{"name":"draw_text_scribble_ext","path":"scripts/draw_text_scribble_ext/draw_text_scribble_ext.yy",},},
