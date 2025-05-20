@@ -72,7 +72,8 @@ navIndX = 0
 textSelectedColor = make_color_rgb(24,20,37)
 textUnselectedColor = make_color_rgb(194,133,105)
 textDescColor = make_color_rgb(139,155,180)
-
+scribble_color_set("c_selected",make_color_rgb(24,20,37))
+scribble_color_set("c_unSelected",make_color_rgb(194,133,105))
 
 
 

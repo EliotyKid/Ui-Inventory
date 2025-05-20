@@ -33,7 +33,7 @@ if surface_exists(invetorySurf){
     
     draw_set_color(textSelectedColor)
     draw_set_align(1,1)
-    draw_text(_infX+_width*.5,_yy+(_height*.15)*.5,_title)
+    draw_text_scribble(_infX+_width*.5,_yy+(_height*.15)*.5,_title)
     draw_reset_align()
     #endregion
     
@@ -89,7 +89,7 @@ if surface_exists(invetorySurf){
     DrawBox("lt",_contentX,_contentY,_contentWidth,_contentHeight,scl)
     
     
-    DrawBox("lt",navIndX,_indiceY,_indiceWidth,_indiceHeight+1,scl,,,false)
+    DrawBox("lt",navIndX,_indiceY,_indiceWidth,_indiceHeight+2,scl,,,false)
     
     
     for(var i=0; i<array_length(navItems); i++){
@@ -109,7 +109,7 @@ if surface_exists(invetorySurf){
 
         draw_set_align(1,1)
         draw_set_color(i==navInd ? textSelectedColor : textUnselectedColor)
-        draw_text(_x1+_indiceWidth*.5,_y1+_indiceHeight*.5-_marg,navItems[i])
+        draw_text_scribble(_x1+_indiceWidth*.5,_y1+_indiceHeight*.5-_marg,navItems[i])
         draw_set_color(-1)
         draw_reset_align()
     }
@@ -171,8 +171,6 @@ if surface_exists(invetorySurf){
                     
                     if _selectedIndex != -1{ //cheaca se a posiçao ja selecionada tem algo
                         if inv[_selectedIndex] != -1{//checa se no array nessa posição tem algum item
-                            
-                            
                             if inv[_clickedIndex] == -1{//checa se na posição clicada não tem nehum item item
                                 inv[_clickedIndex] = inv[_selectedIndex]
                                 inv[_selectedIndex] = -1
@@ -207,6 +205,7 @@ if surface_exists(invetorySurf){
                                         }
                                     }else{//se for a mesma posiça deselciona 
                                         _newSel=-1
+                                        _resetSlot = true
                                     }
                                 }
                             }
@@ -285,18 +284,22 @@ if surface_exists(invetorySurf){
                 var drawX = _slotCx-_sprW*.5
                 var drawY = _slotCy-_sprH*.5
                 
+                var _textX = x1 + 3*scl
+                var _textY = y1 + 3*scl
+                
                 draw_sprite_ext(_spr,0,drawX,drawY,scl,scl,0,c_white,1)
+                
                 
                 switch _item.type{
                     case ITEMS_TYPE.DURABILITY:
                         
                         break;
                     case ITEMS_TYPE.STAKEABLE:
-                        draw_text(drawX,drawY,_item.qtd)
+                        draw_text_scribble(_textX,_textY,"[wave]"+string(_item.qtd)+"[/wave]")
                         break
                     case ITEMS_TYPE.USABLE:
                         if _item.stakeable{
-                            draw_text(drawX,drawY,_item.qtd)
+                            draw_text_scribble(_textX,_textY,"[wave]"+string(_item.qtd)+"[/wave]")
                         }
                         break
                 }
@@ -315,7 +318,7 @@ if surface_exists(invetorySurf){
         var _nh = numSlotsH-1
         draw_set_color(textSelectedColor)
         draw_set_align(1,1)
-        draw_text(_x0+_nw*_slotWidth+_nw*_buffer+_slotWidth*.5,_y0 + _nh*_slotHeight+_nh*_buffer+_slotHeight*.5,$"{indPage+1}/{numInvPages}")
+        draw_text_scribble(_x0+_nw*_slotWidth+_nw*_buffer+_slotWidth*.5,_y0 + _nh*_slotHeight+_nh*_buffer+_slotHeight*.5,$"{indPage+1}/{numInvPages}")
         draw_reset_align()
         draw_set_color(-1)
         
@@ -412,11 +415,11 @@ if surface_exists(invetorySurf){
                 var _desc = inv[selector.selectedIndex].desc
                 draw_set_color(textSelectedColor)
                 draw_set_align(1,1)
-                draw_text(_x1+_infoBoxW*.5,_y1+_marg*2,_title)
+                draw_text_scribble(_x1+_infoBoxW*.5,_y1+_marg*2,_title)
                 draw_reset_align()
                 draw_set_color(textDescColor)
                 draw_set_font(fDesc)
-                draw_text(_x1+_marg,_y1+_marg+string_height(_title),_desc)
+                draw_text_scribble(_x1+_marg,_y1+_marg+string_height(_title),_desc)
                 draw_set_font(fInventory)
                 draw_set_color(-1)
             }

@@ -1,5 +1,5 @@
-#macro GUI_W 720
-#macro GUI_H 405
+#macro GUI_W 960
+#macro GUI_H 540
 
 enum ITEMS_TYPE{
     BASE,
@@ -23,3 +23,5 @@ global.playerInventory[5]=(ITEM_DATABASE.FindById(2).item)
 global.playerInventory[6]=(ITEM_DATABASE.FindById(0).item)
 global.playerInventory[17]=(ITEM_DATABASE.FindById(0).item)
 global.playerInventory[6].qtd = 8
+
+scribble_anim_wave(3,3,.08)
